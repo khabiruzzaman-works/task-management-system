@@ -5,6 +5,6 @@ import { authentify } from "../../../middleware/auth.middleware.js";
 
 const route = Router();
 
-route.post("/create_user", authentify, adminify, register_controller);
+route.post("/register_worker", authentify, adminify, register_controller);
 
 export default route;

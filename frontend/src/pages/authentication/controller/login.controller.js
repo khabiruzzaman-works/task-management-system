@@ -1,4 +1,4 @@
-import { login_service } from "../service/login.service";
+import { login_service } from "../service/login.service.js";
 
 export async function login_controller(form_data) {
   try {

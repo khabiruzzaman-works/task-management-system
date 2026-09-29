@@ -51,6 +51,7 @@ export default async function login_controller(req, res) {
       user: {
         _id: logged_user._id,
         role: logged_user.role,
+        name:logged_user.name,
       },
       accessToken: access_token,
     });

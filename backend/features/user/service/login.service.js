@@ -30,7 +30,7 @@ export async function update_refresh_token(_id, token) {
   const updated_user = await User.findByIdAndUpdate(
     _id,
     { refresh_token: hashed_refresh_token },
-    { new: true },
+    { returnDocument:"after" },
   );
   return updated_user;
 }

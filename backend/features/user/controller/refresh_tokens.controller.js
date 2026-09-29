@@ -23,6 +23,9 @@ export async function refresh_token_controller(req, res) {
       success: true,
       user: {
         _id: refreshed_data.user_with_new_refresh._id,
+        name:refreshed_data.user_with_new_refresh.name,
+        email:refreshed_data.user_with_new_refresh.email,
+        role:refreshed_data.user_with_new_refresh.role,
       },
       accessToken: refreshed_data.new_access_token,
     });

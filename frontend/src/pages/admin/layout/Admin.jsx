@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/Auth.context.jsx";
+import { logout_controller } from "../../authentication/controller/logout.controller.js";
 import Task_card_as_admin from "../components/Task_card_as_admin.jsx";
 
 // placeholder data so the UI can be judged - delete when the real logic is in
@@ -7,7 +10,8 @@ const DUMMY_TASKS = [
     priority: "High",
     logger_name: "Rafi",
     title: "Fix login bug",
-    description: "Cookie is not set after admin login on Safari, so the user gets logged out on refresh.",
+    description:
+      "Cookie is not set after admin login on Safari, so the user gets logged out on refresh.",
     deadline_date: "20th sep",
     is_overdue: false,
   },
@@ -50,15 +54,43 @@ const DUMMY_TASKS = [
 ];
 
 export default function Admin() {
+  const { user, loading,access_token } = useAuth();
+const navigate = useNavigate()
+  console.log(user);
+ async  function logout_handler(e) {
+    e.preventDefault();
+
+   const data = await logout_controller(access_token);
+console.log(data)
+
+   if (!data.success) {
+     return e.target.value = "logout failed"
+   }
+navigate("/login")
+}
+
+
+
+
   return (
     <>
+     { loading ? (<div className="text-4xl text-green-300">Loading</div>
+      ):(
       <main className="min-h-screen w-full bg-canvas">
         <div className="max-w-[1100px] mx-auto px-8 pt-8 pb-24">
           <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">Task manager</h1>
+            <h1 className="text-title-lg font-bold text-parchment">
+              Task manager
+            </h1>
             <div className="flex flex-col items-end">
-              <span className="text-body-md leading-normal text-chalk">Full name</span>
-              <span className="text-caption-md leading-normal text-fade">username</span>
+              <span className="text-body-md leading-normal text-chalk">
+                {user.name}
+              </span>
+                  <button className="text-caption-md leading-normal text-fade btn btn-sm"
+onClick={logout_handler}
+                  >
+                logout
+              </button>
             </div>
           </div>
 
@@ -90,7 +122,7 @@ export default function Admin() {
             ))}
           </div>
         </div>
-      </main>
+      </main>)}
     </>
   );
 }

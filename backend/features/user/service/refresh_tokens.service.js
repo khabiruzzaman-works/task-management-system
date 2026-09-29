@@ -1,6 +1,8 @@
 import bcryptjs from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken";
 import { token_generator } from "../../../utils/token_generator.js";
 import User from "../model/user.model.js";
+import variables from "../../../config/env_variables.js";
 
 export async function refresh_tokens_service(token) {
   const decoded_user = jsonwebtoken.verify(
@@ -42,7 +44,7 @@ export async function refresh_tokens_service(token) {
   const user_with_new_refresh = await User.findByIdAndUpdate(
     authorized_user._id,
     { refresh_token: new_hashed_refresh_token },
-    { new: true },
+    { returnDocument:"after" },
   );
 
   if (!user_with_new_refresh) {

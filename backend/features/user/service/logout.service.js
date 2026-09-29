@@ -4,7 +4,7 @@ export async function logout_service(_id) {
   const logged_out_user = await User.findByIdAndUpdate(
     _id,
     { refresh_token: null },
-    { new: true },
+    { returnDocument:"after" },
   );
   if (!logged_out_user) {
     const error = new Error("refresh token could update in db");

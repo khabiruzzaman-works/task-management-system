@@ -5,6 +5,7 @@ const min_length = 8;
 
 export async function register_controller(req, res) {
   const { name, password, email } = req.body;
+  console.log(req.body);
   try {
     const email_parts = email.split("@");
 
