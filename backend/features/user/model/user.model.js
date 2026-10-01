@@ -25,7 +25,7 @@ const User_schema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "worker"],
+      enum: ["admin", "manager", "worker"],
       default: "worker",
     },
     reference: {
@@ -33,9 +33,15 @@ const User_schema = new mongoose.Schema(
       ref: "User",
       required: false,
     },
+    manager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+      default: null,
+    },
     refresh_token: {
       type: String,
-      default:null,
+      default: null,
     },
   },
   { timestamps: true },

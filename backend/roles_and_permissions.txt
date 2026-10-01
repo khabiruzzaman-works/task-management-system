@@ -1,0 +1,83 @@
+TASK MANAGER - ROLES AND PERMISSIONS
+====================================
+
+OVERVIEW
+--------
+Three roles, one chain of command:
+Admin creates work and delegates to Managers.
+Managers delegate to their team of Workers.
+Workers do the work and report progress.
+
+There is exactly ONE admin. The admin is created once by a seed script
+(from the env variables), never through any route.
+
+
+1. ADMIN (the boss, only one exists)
+------------------------------------
+Manages people:
+- Create worker accounts (the only way accounts are created)
+- Promote a worker to manager
+- Demote a manager to worker
+- Assign a worker to a manager's team
+
+Manages tasks:
+- Create tasks
+- Assign a task to a manager
+- Reassign a task to another manager
+- Change a task's priority
+- Change a task's details (title, description, deadline)
+- View all tasks (also cancel/delete a task)
+
+Also: login, change own password.
+
+
+2. MANAGER (leads a team of workers)
+------------------------------------
+- Assign tasks to workers ON HIS OWN TEAM only
+- Reassign a task to another worker on his team
+- Change a task's status
+- Review work: approve or reject tasks workers submit
+- View tasks assigned to him and tasks he assigned to workers
+- Login, change own password
+
+A manager cannot: create accounts, promote/demote anyone, edit task
+title/description/priority, or see other managers' tasks.
+
+
+3. WORKER (does the work)
+-------------------------
+- Login, change own password
+- View only his own tasks
+- Change status of his own tasks (up to "submitted")
+
+A worker cannot: assign tasks, see other people's tasks, or approve
+his own work.
+
+
+TASK STATUS FLOW
+----------------
+todo -> in_progress -> submitted -> approved / rejected
+
+- Worker moves a task from todo up to submitted.
+- Only the manager can approve or reject.
+- Rejected tasks go back to in_progress.
+
+
+KEY RULES
+---------
+- Role is NEVER read from the request body.
+- Every action checks role AND ownership (e.g. a manager can only touch
+  tasks and workers that belong to him).
+- Promote and demote clear the user's refresh token, forcing a fresh login.
+- Demoting a manager is blocked until his team and open tasks are moved.
+- Only one admin can exist (enforced by a unique index on role "admin").
+
+
+TO CONFIRM
+----------
+1. Can the manager also edit task title/description/priority? (Assumed: no)
+2. Should workers be able to "submit" and the manager "approve", or is a
+   plain "done" status enough? (Assumed: submit + approve)
+3. Who can delete or cancel a task? (Assumed: admin only)
+4. Can a manager reassign a task to a worker outside his team?
+   (Assumed: no)

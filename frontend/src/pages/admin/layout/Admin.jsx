@@ -1,128 +1,129 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import { logout_controller } from "../../authentication/controller/logout.controller.js";
 import Task_card_as_admin from "../components/Task_card_as_admin.jsx";
+import { DUMMY_TASKS, STATUS_LABEL } from "../../data/dummy_tasks.js";
 
-// placeholder data so the UI can be judged - delete when the real logic is in
-const DUMMY_TASKS = [
-  {
-    id: 1,
-    priority: "High",
-    logger_name: "Rafi",
-    title: "Fix login bug",
-    description:
-      "Cookie is not set after admin login on Safari, so the user gets logged out on refresh.",
-    deadline_date: "20th sep",
-    is_overdue: false,
-  },
-  {
-    id: 2,
-    priority: "Medium",
-    logger_name: "Nusrat",
-    title: "Blog filters",
-    description: "Add a tag filter to the blog page.",
-    deadline_date: "24th sep",
-    is_overdue: false,
-  },
-  {
-    id: 3,
-    priority: "Low",
-    logger_name: "Tanvir",
-    title: "Footer links",
-    description: "Update social links.",
-    deadline_date: "30th sep",
-    is_overdue: false,
-  },
-  {
-    id: 4,
-    priority: "High",
-    logger_name: "Rafi",
-    title: "A really long task title that overflows",
-    description: "Checking how a long title gets truncated.",
-    deadline_date: "18th sep",
-    is_overdue: true,
-  },
-  {
-    id: 5,
-    priority: "Medium",
-    logger_name: "Mahi",
-    title: "Guide page",
-    description: "Write the empty state for the guide page.",
-    deadline_date: "27th sep",
-    is_overdue: false,
-  },
-];
+const PRIORITIES = ["All", "High", "Medium", "Low"];
 
 export default function Admin() {
-  const { user, loading,access_token } = useAuth();
-const navigate = useNavigate()
-  console.log(user);
- async  function logout_handler(e) {
-    e.preventDefault();
+  const { user, loading, set_user, access_token, set_access_token } = useAuth();
+  const navigate = useNavigate();
+  const [search, set_search] = useState("");
+  const [priority, set_priority] = useState("All");
+  const [status, set_status] = useState("all");
 
-   const data = await logout_controller(access_token);
-console.log(data)
+  async function logout_handler() {
+    const data = await logout_controller(access_token);
+    if (!data.success) return;
+    set_user(null);
+    set_access_token(null);
+    navigate("/login");
+  }
 
-   if (!data.success) {
-     return e.target.value = "logout failed"
-   }
-navigate("/login")
-}
+  if (loading) return <div className="text-4xl text-green-300">Loading</div>;
 
+  const q = search.trim().toLowerCase();
+  const visible = DUMMY_TASKS.filter(
+    (t) =>
+      (priority === "All" || t.priority === priority) &&
+      (status === "all" || t.status === status) &&
+      (!q ||
+        t.title.toLowerCase().includes(q) ||
+        t.logger_name.toLowerCase().includes(q)),
+  );
 
-
+  const stats = [
+    { label: "Total", value: DUMMY_TASKS.length },
+    { label: "In progress", value: DUMMY_TASKS.filter((t) => t.status === "in_progress").length },
+    { label: "Done", value: DUMMY_TASKS.filter((t) => t.status === "done").length },
+    { label: "Overdue", value: DUMMY_TASKS.filter((t) => t.is_overdue && t.status !== "done").length, alert: true },
+  ];
 
   return (
-    <>
-     { loading ? (<div className="text-4xl text-green-300">Loading</div>
-      ):(
-      <main className="min-h-screen w-full bg-canvas">
-        <div className="max-w-[1100px] mx-auto px-8 pt-8 pb-24">
-          <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              Task manager
-            </h1>
+    <main className="min-h-screen w-full bg-canvas">
+      <div className="max-w-[1100px] mx-auto px-8 pt-8 pb-24">
+        <div className="flex justify-between items-center pb-6">
+          <h1 className="text-title-lg font-bold text-parchment">Task manager</h1>
+          <div className="flex items-center gap-4">
+            <button className="btn btn-sm btn-primary" onClick={() => navigate("/register-worker")}>
+              Register worker
+            </button>
+            <button className="btn btn-sm btn-primary" onClick={() => navigate("/promote")}>
+             Give a promotion
+            </button>
+            <button className="btn btn-sm btn-primary" onClick={() => navigate("/demote")}>
+             Give a demotion
+            </button>
+            <button className="btn btn-sm btn-primary" onClick={() => navigate("/task-creation")}>
+             Create Task
+            </button>
             <div className="flex flex-col items-end">
-              <span className="text-body-md leading-normal text-chalk">
-                {user.name}
-              </span>
-                  <button className="text-caption-md leading-normal text-fade btn btn-sm"
-onClick={logout_handler}
-                  >
+              <span className="text-body-md leading-normal text-chalk">{user?.name}</span>
+              <button className="text-caption-md leading-normal text-fade btn btn-sm" onClick={logout_handler}>
                 logout
               </button>
             </div>
           </div>
+        </div>
 
-          <hr className="hr-hairline" />
+        <hr className="hr-hairline" />
 
-          <div className="flex flex-wrap items-center gap-2 my-6">
-            <input
-              type="text"
-              placeholder="Search tasks"
-              className="input-vintage text-caption-md leading-normal py-1 max-w-xs mr-2"
-            />
-            <button className="btn btn-sm btn-default">All</button>
-            <button className="btn btn-sm btn-ghost">High</button>
-            <button className="btn btn-sm btn-ghost">Medium</button>
-            <button className="btn btn-sm btn-ghost">Low</button>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+          {stats.map((s) => (
+            <div key={s.label} className="card-vintage-stats">
+              <div className={`text-title-lg font-bold ${s.alert && s.value > 0 ? "text-alert" : "text-parchment"}`}>
+                {s.value}
+              </div>
+              <div className="text-caption-md leading-normal text-fade">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <input
+            type="text"
+            placeholder="Search by title or worker"
+            value={search}
+            onChange={(e) => set_search(e.target.value)}
+            className="input-vintage text-caption-md leading-normal py-1 max-w-xs mr-2"
+          />
+          {PRIORITIES.map((p) => (
+            <button
+              key={p}
+              className={`btn btn-sm ${priority === p ? "btn-default" : "btn-ghost"}`}
+              onClick={() => set_priority(p)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          {["all", "todo", "in_progress", "done"].map((s) => (
+            <button
+              key={s}
+              className={`btn btn-sm ${status === s ? "btn-outline" : "btn-ghost"}`}
+              onClick={() => set_status(s)}
+            >
+              {s === "all" ? "Any status" : STATUS_LABEL[s]}
+            </button>
+          ))}
+        </div>
+
+        {visible.length === 0 ? (
+          <div className="card-vintage-soft text-center text-caption-md leading-normal text-fade py-10">
+            No tasks match these filters.
           </div>
-
+        ) : (
           <div className="grid grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] gap-4">
-            {DUMMY_TASKS.map((task) => (
-              <Task_card_as_admin
-                key={task.id}
-                priority={task.priority}
-                logger_name={task.logger_name}
-                title={task.title}
-                description={task.description}
-                deadline_date={task.deadline_date}
-                is_overdue={task.is_overdue}
-              />
+            {visible.map((task) => (
+              <Task_card_as_admin key={task.id} {...task} />
             ))}
           </div>
-        </div>
-      </main>)}
-    </>
+        )}
+      </div>
+    </main>
   );
 }

@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
+import { Employee_Provider } from "../../../context/Employee.context.jsx";
 
 export default function Admin_protected_route() {
   const { user, loading } = useAuth();
@@ -16,5 +17,9 @@ export default function Admin_protected_route() {
     return <Navigate to="/worker" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <Employee_Provider>
+      <Outlet />;
+    </Employee_Provider>
+  );
 }
