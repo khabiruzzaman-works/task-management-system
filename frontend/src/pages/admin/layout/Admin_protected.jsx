@@ -19,7 +19,7 @@ export default function Admin_protected_route() {
 
   return (
     <Employee_Provider>
-      <Outlet />;
+      <Outlet />
     </Employee_Provider>
   );
 }

@@ -43,7 +43,7 @@ export function Employee_Provider({ children }) {
         set_employee(data.employee_list);
       } catch (error) {
         console.log("refresh failed:", error.message);
-        set_employee(null);
+        set_employee([]);
       } finally {
         set_loading(false);
         restored_session = null;

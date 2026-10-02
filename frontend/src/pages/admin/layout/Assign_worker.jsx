@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/Auth.context";
 import assign_worker_controller from "../controller/assign_worker.controller";
 
 export default function Assign_worker() {
-  const { employee, loading, refresh_empoyee } = useEmployee();
+  const { employee, loading, refresh_employee } = useEmployee();
   const { access_token } = useAuth();
   const navigate = useNavigate();
   const [worker_email, set_worker_email] = useState("");
@@ -26,7 +26,7 @@ export default function Assign_worker() {
       set_worker_email("");
       set_manager_email("");
 
-      await refresh_empoyee();
+      await refresh_employee();
     }
     console.log(data.message);
   }

@@ -24,7 +24,7 @@ export async function pass_change_controller(req, res) {
 
     if (!pass_updated) {
       return (
-        res.status(405),
+        res.status(405).
         json({
           message: "pass couldn't update",
           success: false,
