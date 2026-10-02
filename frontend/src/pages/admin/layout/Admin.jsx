@@ -61,6 +61,11 @@ export default function Admin() {
             </button>
             <div className="flex flex-col items-end">
               <span className="text-body-md leading-normal text-chalk">{user?.name}</span>
+              <button className="text-caption-md leading-normal text-fade btn btn-sm" onClick={function () {
+                navigate("/change-password")
+              }}>
+                Change Password
+              </button>
               <button className="text-caption-md leading-normal text-fade btn btn-sm" onClick={logout_handler}>
                 logout
               </button>

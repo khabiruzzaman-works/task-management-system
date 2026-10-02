@@ -22,7 +22,7 @@ export default async function demotion_controller(req, res) {
 
     res.status(201).json({
       message: `${is_demoted.name} is demoted to worker`,
-      success: false,
+      success: true,
     });
   } catch (error) {
     res.status(error.status || 500).json({

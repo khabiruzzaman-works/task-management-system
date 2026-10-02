@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { useAuth } from "./Auth.context.jsx";
+import { useCallback } from "react";
 
 const employee_context = createContext(null);
 
@@ -32,8 +33,8 @@ export function Employee_Provider({ children }) {
   const [employee, set_employee] = useState([]);
   const [loading, set_loading] = useState(true);
 
-  useEffect(function () {
-    async function refresh_session() {
+  const refresh_employee = useCallback(
+    async function () {
       try {
         if (!restored_session) {
           restored_session = fetch_session(access_token);
@@ -47,13 +48,19 @@ export function Employee_Provider({ children }) {
         set_loading(false);
         restored_session = null;
       }
-    }
+    },
+    [access_token],
+  );
 
-    refresh_session();
-  }, []);
+  useEffect(
+    function () {
+      refresh_employee();
+    },
+    [refresh_employee],
+  );
 
   return (
-    <employee_context.Provider value={{ employee, loading }}>
+    <employee_context.Provider value={{ employee, loading, refresh_employee }}>
       {children}
     </employee_context.Provider>
   );
