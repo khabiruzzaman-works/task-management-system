@@ -10,7 +10,8 @@ export default function Task_creation() {
     title: "",
     description: "",
     priority: "high",
-    manager: "",
+    status:"pending",
+    manager_email: "",
   });
   const navigate = useNavigate();
   const { employee, loading } = useEmployee();
@@ -104,18 +105,32 @@ export default function Task_creation() {
             </div>
 
             <div>
+              <label className="label-vintage">status</label>
+              <select
+                className="select-vintage"
+                name="status"
+                value={task_form.status}
+                onChange={input_handler}
+              >
+                <option value="pending">pending</option>
+                <option value="in_progress">in_progress</option>
+                <option value="completed">completed</option>
+              </select>
+            </div>
+
+            <div>
               <label className="label-vintage">manager</label>
               <select
                 className="select-vintage"
-                name="manager"
-                value={task_form.manager}
+                name="manager_email"
+                value={task_form.manager_email}
                 onChange={input_handler}
                 required
               >
                 <option value="">select a manager</option>
                 {managers.map(function (manager) {
                   return (
-                    <option key={manager._id} value={manager._id}>
+                    <option key={manager.email} value={manager.email}>
                       {manager.name}
                     </option>
                   );

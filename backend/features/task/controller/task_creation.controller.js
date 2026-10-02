@@ -1,32 +1,32 @@
-import { task_creation_service } from "../service/task_creation.service.js";
+import task_creation_service from "../service/task_creation.service.js";
 
 export async function task_creation_controller(req, res) {
-  const { title, description, priority, status, manager } = req.body;
+  const { title, description, priority, status, manager_email } = req.body;
 
-  const created_by = req.user._id;
+  const assigned_by = req.user._id;
 
   if (
     !title ||
     !description ||
     !priority ||
     !status ||
-    !created_by ||
-    !assigned_to
+    !assigned_by ||
+    !manager_email
   ) {
     return res.status(405).json({
-      message: "task data couldn't posted",
+      message: "task data is incomplete",
       success: false,
     });
   }
 
   try {
-    const response = task_creation_service({
+    const response = await task_creation_service({
       title,
       description,
       priority,
       status,
-      manager,
-      created_by,
+      manager_email,
+      assigned_by,
     });
 
     if (!response.ok) {

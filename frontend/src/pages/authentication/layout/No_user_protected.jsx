@@ -21,5 +21,5 @@ export default function No_user_protected_route() {
     return <Navigate to="/worker" replace />;
   }
 
-  return <Outlet />;
+  return (<Outlet />);
 }

@@ -31,6 +31,7 @@ const Task_schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
+      required:false,
     },
     manager: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login_controller } from "../controller/login.controller";
+import { login_controller } from "../controller/login.controller.js";
 import { useAuth } from "../../../context/Auth.context.jsx";
 
 export default function Login() {
