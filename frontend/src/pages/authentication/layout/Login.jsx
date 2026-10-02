@@ -20,13 +20,13 @@ export default function Login() {
     console.log(stat.user);
     set_user(stat.user);
     set_access_token(stat.accessToken);
-    if (stat.success) {
+    if (!stat.success) {
       return console.log(`${stat.message}`);
     }
     console.log("yay");
-    if (user?.role === "admin") {
+    if (stat.user?.role === "admin") {
       navigate("/admin");
-    } else if (user?.role === "manager") {
+    } else if (stat.user?.role === "manager") {
       navigate("/manager");
     } else {
       navigate("/worker");

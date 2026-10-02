@@ -16,6 +16,7 @@ import Pass_change from "./pages/admin/layout/Pass_change.jsx";
 import Manager from "./pages/manager/layout/Manager.jsx";
 import Manager_protected_route from "./pages/admin/layout/manager_protected.jsx";
 import Worker_protected_route from "./pages/admin/layout/worker_protected.jsx";
+import No_user_protected_route from "./pages/authentication/layout/No_user_protected.jsx";
 
 export default function App() {
   return (
@@ -23,14 +24,16 @@ export default function App() {
       <Auth_Provider>
         <BrowserRouter>
           <Routes>
-            <Route path={"/"} element={<Login />}></Route>
-            <Route path={"/login"} element={<Login />}></Route>
+            <Route element={<No_user_protected_route />}>
+              <Route path={"/"} element={<Login />}></Route>
+              <Route path={"/login"} element={<Login />}></Route>
+            </Route>
 
             <Route element={<Auth_protected_route />}>
-              <Route element={<Manager />}>
+              <Route element={<Manager_protected_route />}>
                 <Route path={"/manager"} element={<Manager />}></Route>
               </Route>
-              <Route element={<Worker />}>
+              <Route element={<Worker_protected_route />}>
                 <Route path={"/worker"} element={<Worker />}></Route>
               </Route>
               <Route
