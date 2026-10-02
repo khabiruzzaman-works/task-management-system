@@ -30,7 +30,7 @@ const Task_schema = new mongoose.Schema(
     assigned_to: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      default: null,
+      // default: null,
       required:false,
     },
     manager: {

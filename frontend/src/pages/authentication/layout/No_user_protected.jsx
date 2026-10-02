@@ -8,9 +8,6 @@ export default function No_user_protected_route() {
     return <div className="text-4xl text-green-200">loading</div>;
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
   if (user?.role === "admin") {
     return <Navigate to="/admin" replace />;
   }
