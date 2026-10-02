@@ -27,18 +27,33 @@ export default function Register_worker() {
   }
   return (
     <>
-      <div className="bg-zinc-950 w-full min-h-screen flex items-center justify-center p-4">
-        <form
-          onSubmit={form_handler}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-8 max-w-sm w-full flex flex-col gap-6"
-        >
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-500 px-1">
-                Worker's name
-              </label>
+      <main className="min-h-screen w-full bg-canvas">
+        <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
+          <div className="flex justify-between items-center pb-6">
+            <h1 className="text-title-lg font-bold text-parchment">
+              Register worker
+            </h1>
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={function () {
+                navigate("/admin");
+              }}
+            >
+              back
+            </button>
+          </div>
+
+          <hr className="hr-hairline" />
+
+          <form
+            onSubmit={form_handler}
+            className="card-vintage flex flex-col gap-5 mt-6"
+          >
+            <div>
+              <label className="label-vintage">worker's name</label>
               <input
-                className="bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder:text-zinc-700 outline-none focus:border-zinc-600 rounded-xl px-4 py-3 text-sm transition-all duration-200"
+                className="input-vintage"
                 type="text"
                 name="name"
                 placeholder="Worker's name"
@@ -47,12 +62,11 @@ export default function Register_worker() {
                 required
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-500 px-1">
-                Worker's Email
-              </label>
+
+            <div>
+              <label className="label-vintage">worker's email</label>
               <input
-                className="bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder:text-zinc-700 outline-none focus:border-zinc-600 rounded-xl px-4 py-3 text-sm transition-all duration-200"
+                className="input-vintage"
                 type="email"
                 name="email"
                 placeholder="*****@kr.org"
@@ -62,13 +76,10 @@ export default function Register_worker() {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-500 px-1">
-                Password
-              </label>
-
+            <div>
+              <label className="label-vintage">password</label>
               <input
-                className="bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder:text-zinc-700 outline-none focus:border-zinc-600 rounded-xl px-4 py-3 text-sm transition-all duration-200"
+                className="input-vintage"
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -77,16 +88,26 @@ export default function Register_worker() {
                 required
               />
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="bg-zinc-800 border border-zinc-800 text-zinc-300 hover:bg-transparent hover:border-zinc-700 rounded-xl py-3.5 text-sm font-medium transition-all duration-300 cursor-pointer active:scale-[0.98] mt-2"
-          >
-            Register a worker
-          </button>
-        </form>
-      </div>
+            <hr className="hr-hairline" />
+
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                className="btn btn-md btn-ghost"
+                onClick={function () {
+                  navigate("/admin");
+                }}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-md btn-primary">
+                Register worker
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </>
   );
 }

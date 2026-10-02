@@ -13,6 +13,7 @@ import Demotion from "./pages/admin/layout/Demotion.jsx";
 import Assign_worker from "./pages/admin/layout/Assign_worker.jsx";
 import Auth_protected_route from "./pages/admin/layout/auth_protected.jsx";
 import Pass_change from "./pages/admin/layout/Pass_change.jsx";
+import Manager from "./pages/manager/layout/Manager.jsx";
 
 export default function App() {
   return (
@@ -23,9 +24,13 @@ export default function App() {
             <Route path={"/"} element={<Login />}></Route>
             <Route path={"/login"} element={<Login />}></Route>
 
-            <Route element={<Auth_protected_route/>}>
+            <Route element={<Auth_protected_route />}>
+              <Route path={"/manager"} element={<Manager />}></Route>
               <Route path={"/worker"} element={<Worker />}></Route>
-              <Route path={"/change-password"} element={<Pass_change />}></Route>
+              <Route
+                path={"/change-password"}
+                element={<Pass_change />}
+              ></Route>
             </Route>
 
             <Route element={<Admin_protected_route />}>

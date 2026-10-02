@@ -13,7 +13,11 @@ export default function Admin_protected_route() {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role !== "admin") {
+  if (user.role === "manager") {
+    return <Navigate to="/manager" replace />;
+  }
+
+  if (user.role === "worker") {
     return <Navigate to="/worker" replace />;
   }
 

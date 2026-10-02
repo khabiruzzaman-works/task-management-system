@@ -7,12 +7,24 @@ export default function Pass_change() {
   const [old_password, set_old_Pasword] = useState("");
   const [new_password, set_new_password] = useState("");
   const [new_password_again, set_new_password_again] = useState("");
+  const [submitting, set_submitting] = useState(false);
   const { user, access_token } = useAuth();
   const max_length = 72;
   const min_length = 8;
   const navigate = useNavigate();
 
-  async function password_changer() {
+  function go_back() {
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else if (user?.role === "manager") {
+      navigate("/manager");
+    } else {
+      navigate("/worker");
+    }
+  }
+
+  async function password_changer(e) {
+    e.preventDefault();
     if (
       new_password.length < min_length ||
       new_password_again.length < min_length ||
@@ -26,69 +38,109 @@ export default function Pass_change() {
     if (!is_new_pass_correct) {
       return console.log("both new password has to be the same");
     }
+
+    set_submitting(true);
     const data = await pass_change_controller(
       new_password,
       old_password,
       access_token,
     );
+    set_submitting(false);
 
     if (!data.success) {
       return console.log("couldn't change the pass from frontend");
     }
 
-    if (user.role === "admin") {
-      navigate("/admin");
-    } else if (user.role === "manager") {
-      navigate("/manager");
-    } else {
-      navigate("/worker");
-    }
+    go_back();
   }
 
   return (
-    <>
-      <div>
-        <div>
-          <label>Old Password</label>
-          <input
-            type="password"
-            name="old_password"
-            value={old_password}
-            className=""
-            onChange={function (e) {
-              set_old_Pasword(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label>New Password</label>
-          <input
-            type="password"
-            name="new_password"
-            value={new_password}
-            className=""
-            onChange={function (e) {
-              set_new_password(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label>Retype New Password</label>
-          <input
-            type="password"
-            name="new_password_again"
-            value={new_password_again}
-            className=""
-            onChange={function (e) {
-              set_new_password_again(e.target.value);
-            }}
-          />
+    <main className="min-h-screen w-full bg-canvas">
+      <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
+        <div className="flex justify-between items-center pb-6">
+          <h1 className="text-title-lg font-bold text-parchment">
+            Change password
+          </h1>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={go_back}
+          >
+            back
+          </button>
         </div>
 
-        <button onClick={password_changer} className="">
-          change Password
-        </button>
+        <hr className="hr-hairline" />
+
+        <form
+          onSubmit={password_changer}
+          className="card-vintage flex flex-col gap-5 mt-6"
+        >
+          <div>
+            <label className="label-vintage">old password</label>
+            <input
+              className="input-vintage"
+              type="password"
+              name="old_password"
+              placeholder="••••••••"
+              value={old_password}
+              onChange={function (e) {
+                set_old_Pasword(e.target.value);
+              }}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label-vintage">new password</label>
+            <input
+              className="input-vintage"
+              type="password"
+              name="new_password"
+              placeholder="8 to 72 characters"
+              value={new_password}
+              onChange={function (e) {
+                set_new_password(e.target.value);
+              }}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label-vintage">retype new password</label>
+            <input
+              className="input-vintage"
+              type="password"
+              name="new_password_again"
+              placeholder="••••••••"
+              value={new_password_again}
+              onChange={function (e) {
+                set_new_password_again(e.target.value);
+              }}
+              required
+            />
+          </div>
+
+          <hr className="hr-hairline" />
+
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="btn btn-md btn-ghost"
+              onClick={go_back}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-md btn-primary"
+              disabled={submitting}
+            >
+              {submitting ? "Changing..." : "Change password"}
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+    </main>
   );
 }

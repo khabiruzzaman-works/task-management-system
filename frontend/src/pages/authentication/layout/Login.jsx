@@ -6,7 +6,7 @@ import { useAuth } from "../../../context/Auth.context.jsx";
 export default function Login() {
   const navigate = useNavigate();
   const [worker, set_worker] = useState({});
-  const { user, set_user, access_token, set_access_token,loading} = useAuth();
+  const { user, set_user, access_token, set_access_token, loading } = useAuth();
 
   function input_handler(e) {
     set_worker(function (prev) {
@@ -17,32 +17,44 @@ export default function Login() {
   async function form_handler(e) {
     e.preventDefault();
     const stat = await login_controller(worker);
-    console.log(stat.user)
+    console.log(stat.user);
     set_user(stat.user);
     set_access_token(stat.accessToken);
     if (stat.success) {
-      const is_admin = stat.user?.role === "admin";
-      is_admin ? navigate("/admin") : navigate("/worker");
+      return console.log(`${stat.message}`);
     }
     console.log("yay");
-
-    return console.log(`${stat.message}`);
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else if (user?.role === "manager") {
+      navigate("/manager");
+    } else {
+      navigate("/worker");
+    }
   }
   return (
     <>
+      <main className="min-h-screen w-full bg-canvas flex items-center justify-center px-8">
+        <div className="w-full max-w-[400px]">
+          <div className="pb-6">
+            <h1 className="text-title-lg font-bold text-parchment">
+              Task manager
+            </h1>
+            <p className="text-caption-md leading-normal text-fade">
+              Log in to continue.
+            </p>
+          </div>
 
-      <div className="bg-zinc-950 w-full min-h-screen flex items-center justify-center p-4">
-        <form
-          onSubmit={form_handler}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-8 max-w-sm w-full flex flex-col gap-6"
-        >
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-500 px-1">
-                Email
-              </label>
+          <hr className="hr-hairline" />
+
+          <form
+            onSubmit={form_handler}
+            className="card-vintage flex flex-col gap-5 mt-6"
+          >
+            <div>
+              <label className="label-vintage">email</label>
               <input
-                className="bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder:text-zinc-700 outline-none focus:border-zinc-600 rounded-xl px-4 py-3 text-sm transition-all duration-200"
+                className="input-vintage"
                 type="email"
                 name="email"
                 placeholder="*****@kr.org"
@@ -52,13 +64,10 @@ export default function Login() {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-medium text-zinc-500 px-1">
-                Password
-              </label>
-
+            <div>
+              <label className="label-vintage">password</label>
               <input
-                className="bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder:text-zinc-700 outline-none focus:border-zinc-600 rounded-xl px-4 py-3 text-sm transition-all duration-200"
+                className="input-vintage"
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -67,16 +76,17 @@ export default function Login() {
                 required
               />
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="bg-zinc-800 border border-zinc-800 text-zinc-300 hover:bg-transparent hover:border-zinc-700 rounded-xl py-3.5 text-sm font-medium transition-all duration-300 cursor-pointer active:scale-[0.98] mt-2"
-          >
-            Login
-          </button>
-        </form>
-      </div>
+            <hr className="hr-hairline" />
+
+            <div className="flex justify-end">
+              <button type="submit" className="btn btn-md btn-primary">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </>
   );
 }
