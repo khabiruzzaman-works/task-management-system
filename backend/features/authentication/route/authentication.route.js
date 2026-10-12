@@ -7,13 +7,14 @@ import { register_controller } from "../controller/register.controller.js";
 import login_controller from "../controller/login.controller.js";
 import adminify from "../../../middleware/adminify.middleware.js";
 import { authentify } from "../../../middleware/auth.middleware.js";
+import { login_limit,register_limit,pass_change_limit } from "../../../middleware/rate_limiter.middleware.js";
 
 const route = Router();
 
-route.post("/login", login_controller);
-route.post("/register-user", authentify, adminify, register_controller);
+route.post("/login", login_limit(),login_controller);
+route.post("/register-user",register_limit(), authentify, adminify, register_controller);
 route.get("/refresh-tokens", refresh_token_controller);
-route.patch("/change-pass", authentify, pass_change_controller);
+route.patch("/change-pass", pass_change_limit(),authentify, pass_change_controller);
 route.get("/get-me", authentify, get_me_controller);
 route.delete("/logout", authentify, logout_controller);
 

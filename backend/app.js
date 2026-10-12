@@ -8,8 +8,13 @@ import admin_route from "./features/admin/route/admin.route.js";
 import manager_route from "./features/manager/route/manager.route.js";
 import { App_error } from "./utils/app_outcome_handler.js";
 import variables from "./config/env_variables.js";
+import { global_limit } from "./middleware/rate_limiter.middleware.js";
 
 const app = express();
+
+if (variables.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 const corsOptions = {
   origin: variables.CLIENT_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -20,13 +25,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
-
+app.use("/api",global_limit())
 app.use("/api/authentication", authentication_route);
 app.use("/api/user/admin", admin_route);
 app.use("/api/user/manager", manager_route);
 app.use("/api/task", task_route);
-
-
 
 app.use((err, req, res, next) => {
   if (err instanceof App_error) return err.send_response(res);
