@@ -6,6 +6,8 @@ import { useWorker } from "../../../context/Worker.context.jsx";
 import { edit_task_as_manager_controller } from "../controller/edit_task_as_manager.controller.js";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/Loading_screen.jsx";
+import Form_head from "../../../components/Form_head.jsx";
+import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
 
 export default function Edit_task_as_manager() {
   let params = useParams();
@@ -26,9 +28,10 @@ export default function Edit_task_as_manager() {
       <main className="page">
         <div className="container container-narrow">
           <div className="empty empty-error">
+            <p className="empty-mark">[!]</p>
             <p className="empty-title">Couldn't find this task.</p>
             <p className="muted">It may have been removed or reassigned.</p>
-            <div className="row justify-center" style={{ marginTop: "var(--space-4)" }}>
+            <div className="empty-actions">
               <button className="btn btn-sm" onClick={() => navigate("/manager")}>
                 Back to team tasks
               </button>
@@ -73,86 +76,90 @@ export default function Edit_task_as_manager() {
   return (
     <main className="page">
       <div className="container container-narrow">
-        <header className="page-header">
-          <h1>Manage task</h1>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={function () {
-              navigate("/manager");
-            }}
-          >
-            back
-          </button>
-        </header>
+        <Form_head
+          eyebrow="Manager / Tasks"
+          title="Manage task"
+          description="Start the task and choose which worker carries it."
+          on_back={function () {
+            navigate("/manager");
+          }}
+        />
 
-        <form onSubmit={submit_handler} className="card stack">
-          <div>
-            <span className="label label-caps">title</span>
-            <h2>{the_task?.title}</h2>
-          </div>
-
-          <div>
-            <span className="label label-caps">description</span>
-            <p className="muted">{the_task?.description}</p>
-          </div>
-
-          <div className="flex flex-wrap gap-x-10 gap-y-4">
-            <div>
-              <span className="label label-caps">priority</span>
-              <span className="tag capitalize">{the_task?.priority}</span>
+        <form onSubmit={submit_handler} className="card form-card">
+          <div className="task-summary">
+            <div className="row">
+              <Priority_tag priority={the_task?.priority} />
+              <Status_tag status={the_task?.status} />
             </div>
             <div>
-              <span className="label label-caps">manager</span>
-              <span>{the_task?.manager?.name}</span>
+              <span className="label label-caps">title</span>
+              <h2>{the_task?.title}</h2>
+            </div>
+            <div>
+              <span className="label label-caps">description</span>
+              <p className="muted">{the_task?.description}</p>
+            </div>
+            <div className="facts">
+              <div>
+                <span className="label label-caps">manager</span>
+                <span>{the_task?.manager?.name}</span>
+              </div>
+              <div>
+                <span className="label label-caps">worker</span>
+                <span className={the_task?.assigned_to ? "" : "faint"}>
+                  {the_task?.assigned_to?.name ?? "not assigned yet"}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="status">status</label>
-            <select
-              id="status"
-              className="select"
-              name="status"
-              disabled={is_out_of_option}
-              value={form.status ?? the_task.status}
-              onChange={input_handler}
-            >
-              <option value={the_task.status}>{the_task.status} (currently)</option>
-              {is_allowed_status.map(function (s, index) {
-                return (
-                  <option key={index} value={s}>
-                    {s}
-                  </option>
-                );
-              })}
-            </select>
+          <div className="form-body">
+            <div>
+              <label className="label label-caps" htmlFor="status">status</label>
+              <select
+                id="status"
+                className="select"
+                name="status"
+                disabled={is_out_of_option}
+                value={form.status ?? the_task.status}
+                onChange={input_handler}
+              >
+                <option value={the_task.status}>{the_task.status} (currently)</option>
+                {is_allowed_status.map(function (s, index) {
+                  return (
+                    <option key={index} value={s}>
+                      {s}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="worker_email">worker</label>
+              <select
+                id="worker_email"
+                onChange={input_handler}
+                name="worker_email"
+                disabled={!can_change_worker}
+                value={form?.worker_email ?? the_task?.assigned_to?.email}
+                className="select"
+              >
+                <option value={the_task?.assigned_to?.email}>
+                  {the_task?.assigned_to?.name ?? "not assigned yet"} (currently)
+                </option>
+                {worker.map(function (user) {
+                  return (
+                    <option key={user?.email} value={user?.email}>
+                      {user?.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="worker_email">worker</label>
-            <select
-              id="worker_email"
-              onChange={input_handler}
-              name="worker_email"
-              disabled={!can_change_worker}
-              value={form?.worker_email ?? the_task?.assigned_to?.email}
-              className="select"
-            >
-              <option value={the_task?.assigned_to?.email}>
-                {the_task?.assigned_to?.name ?? "not assigned yet"} (currently)
-              </option>
-              {worker.map(function (user) {
-                return (
-                  <option key={user?.email} value={user?.email}>
-                    {user?.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="row justify-end">
+          <div className="form-actions">
             <button
               type="button"
               className="btn btn-md btn-ghost"

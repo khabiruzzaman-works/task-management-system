@@ -12,6 +12,12 @@ const TYPE_CLASS = {
   info: "toast-info",
 };
 
+const TYPE_MARK = {
+  error: "[!]",
+  success: "[x]",
+  info: "[#]",
+};
+
 export function Toast_Provider({ children }) {
   const [toasts, set_toasts] = useState([]);
 
@@ -43,14 +49,12 @@ export function Toast_Provider({ children }) {
       <div className="toast-area" role="status" aria-live="polite">
         {toasts.map(function (t) {
           return (
-            <div
-              key={t.id}
-              className={`toast ${TYPE_CLASS[t.type] ?? ""} flex justify-between items-start gap-3`}
-            >
-              <span>{t.message}</span>
+            <div key={t.id} className={`toast ${TYPE_CLASS[t.type] ?? ""}`}>
+              <span aria-hidden="true">{TYPE_MARK[t.type] ?? "[#]"}</span>
+              <span className="toast-text">{t.message}</span>
               <button
                 type="button"
-                className="muted cursor-pointer"
+                className="toast-close"
                 aria-label="dismiss"
                 onClick={function () {
                   remove(t.id);

@@ -188,3 +188,13 @@
   --sheen:          4%;
   --shadow-pop:     0 12px 32px rgba(0, 0, 0, 0.18);
 }
+
+/* ---------- status colors on light backgrounds ----------
+   The bright dark-mode status colors are too pale on cream or white paper,
+   so light themes (both palettes) use deeper versions, about 4.5:1 contrast. */
+:root[data-theme="light"] {
+  --info:  #0b6c97;
+  --warn:  #8a5700;
+  --clear: #17703a;
+  --alert: #c4281d;
+}

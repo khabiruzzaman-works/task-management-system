@@ -7,6 +7,7 @@ import Task_view_card from "../../../components/Task_view_card.jsx";
 import Stat from "../../../components/Stat.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/Loading_screen.jsx";
+import Topbar from "../../../components/Topbar.jsx";
 
 export default function Manager() {
   const navigate = useNavigate();
@@ -40,72 +41,65 @@ export default function Manager() {
   }
 
   return (
-    <main className="page">
-      <div className="container">
-        <header className="page-header">
-          <div>
+    <>
+      <Topbar
+        role_label="Manager"
+        user_name={user?.name}
+        on_change_password={() => navigate("/change-password")}
+        on_logout={logout_handler}
+      />
+
+      <main className="page page-dash">
+        <div className="container">
+          <div className="page-title">
+            <p className="eyebrow">Manager overview</p>
             <h1>Team tasks</h1>
             <p className="muted">
               Manager overview. What's on your plate and who's carrying it.
             </p>
           </div>
 
-          <div className="row">
-            <div className="flex flex-col items-end">
-              <span>{user?.name}</span>
-              <span className="muted text-xs">Manager</span>
+          <div className="stack">
+            <div className="grid-stats">
+              <Stat label="Total" value={manager_tasks.length} caption="all tasks" />
+              <Stat label="Pending" value={count("pending")} caption="not started" />
+              <Stat label="In progress" value={count("in_progress")} caption="being worked on" tone="info" />
+              <Stat label="Submitted" value={count("submitted")} caption="waiting for approval" tone="warn" />
+              <Stat label="Approved" value={count("approved")} caption="finished" tone="clear" />
+              <Stat label="Rejected" value={count("rejected")} caption="sent back" tone="alert" />
             </div>
-            <button
-              className="btn btn-sm btn-ghost"
-              onClick={() => navigate("/change-password")}
-            >
-              Change password
-            </button>
-            <button className="btn btn-sm btn-outline" onClick={logout_handler}>
-              Log out
-            </button>
-          </div>
-        </header>
 
-        <div className="stack">
-          <div className="grid-stats">
-            <Stat label="Total" value={manager_tasks.length} caption="all tasks" />
-            <Stat label="Pending" value={count("pending")} caption="not started" />
-            <Stat label="In progress" value={count("in_progress")} caption="being worked on" tone="info" />
-            <Stat label="Submitted" value={count("submitted")} caption="waiting for approval" tone="warn" />
-            <Stat label="Approved" value={count("approved")} caption="finished" tone="clear" />
-            <Stat label="Rejected" value={count("rejected")} caption="sent back" tone="alert" />
-          </div>
-
-          <div className="row row-between">
-            <h2>Your tasks</h2>
-            <span className="muted text-sm">{manager_tasks.length} total</span>
-          </div>
-
-          {manager_tasks.length === 0 && (
-            <div className="empty">
-              <p className="empty-title">Nothing on your plate.</p>
-              <p className="muted">
-                Tasks the admin assigns to you will show up here.
-              </p>
+            <div className="section-head">
+              <h2>Your tasks</h2>
+              <span className="faint text-sm">{manager_tasks.length} total</span>
             </div>
-          )}
 
-          {manager_tasks.length > 0 && (
-            <div className="flex flex-col gap-2">
-              {manager_tasks.map(function (task) {
-                return (
-                  <Task_view_card
-                    key={task._id}
-                    task={task}
-                    edit_path={`/manager/task/edit/${task._id}`}
-                  />
-                );
-              })}
-            </div>
-          )}
+            {manager_tasks.length === 0 && (
+              <div className="empty">
+                <p className="empty-mark">[ ]</p>
+                <p className="empty-title">Nothing on your plate.</p>
+                <p className="muted">
+                  Tasks the admin assigns to you will show up here.
+                </p>
+              </div>
+            )}
+
+            {manager_tasks.length > 0 && (
+              <div className="flex flex-col gap-3">
+                {manager_tasks.map(function (task) {
+                  return (
+                    <Task_view_card
+                      key={task._id}
+                      task={task}
+                      edit_path={`/manager/task/edit/${task._id}`}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

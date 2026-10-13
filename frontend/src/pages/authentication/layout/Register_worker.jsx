@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { register_worker_controller } from "../controller/register.controller.js";
 import { useEmployee } from "../../../context/Employee.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
+import Form_head from "../../../components/Form_head.jsx";
 
 export default function Register_worker() {
   const navigate = useNavigate();
@@ -29,63 +30,62 @@ export default function Register_worker() {
   return (
     <main className="page">
       <div className="container container-narrow">
-        <header className="page-header">
-          <h1>Register worker</h1>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={function () {
-              navigate("/admin");
-            }}
-          >
-            back
-          </button>
-        </header>
+        <Form_head
+          eyebrow="Admin / People"
+          title="Register worker"
+          description="Create an account for a new worker. They can change the password after their first login."
+          on_back={function () {
+            navigate("/admin");
+          }}
+        />
 
-        <form onSubmit={form_handler} className="card stack">
-          <div>
-            <label className="label label-caps" htmlFor="name">worker's name</label>
-            <input
-              id="name"
-              className="input"
-              type="text"
-              name="name"
-              placeholder="Worker's name"
-              value={form.name}
-              onChange={input_handler}
-              required
-            />
+        <form onSubmit={form_handler} className="card form-card">
+          <div className="form-body">
+            <div>
+              <label className="label label-caps" htmlFor="name">worker's name</label>
+              <input
+                id="name"
+                className="input"
+                type="text"
+                name="name"
+                placeholder="Worker's name"
+                value={form.name}
+                onChange={input_handler}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="email">worker's email</label>
+              <input
+                id="email"
+                className="input"
+                type="email"
+                name="email"
+                placeholder="*****@kr.org"
+                value={form.email}
+                onChange={input_handler}
+                required
+              />
+              <p className="hint">Only emails on your organisation's domain can log in.</p>
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="password">password</label>
+              <input
+                id="password"
+                className="input"
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={input_handler}
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="email">worker's email</label>
-            <input
-              id="email"
-              className="input"
-              type="email"
-              name="email"
-              placeholder="*****@kr.org"
-              value={form.email}
-              onChange={input_handler}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="label label-caps" htmlFor="password">password</label>
-            <input
-              id="password"
-              className="input"
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={input_handler}
-              required
-            />
-          </div>
-
-          <div className="row justify-end">
+          <div className="form-actions">
             <button
               type="button"
               className="btn btn-md btn-ghost"
