@@ -1,0 +1,197 @@
+/* ==========================================================================
+   ASH v1.0  -  components.css
+   Reusable pieces. Only variables from tokens.css, no raw colors.
+
+   Texture recipe (used on buttons, cards, stats):
+     gradient   a faint light-to-dark sheen built from surface tokens
+     inset top  var(--edge-light)  a thin highlight along the top edge
+     inset low  var(--edge-dark)   a thin shade along the bottom edge
+   ========================================================================== */
+
+/* ---------- layout helpers ---------- */
+.container { width: 100%; max-width: var(--max-width); margin-inline: auto; padding-inline: var(--space-5); }
+.container-narrow { max-width: var(--max-width-narrow); }
+.stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.row   { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.row-between { justify-content: space-between; }
+.grid-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+@media (min-width: 900px) { .grid-stats { grid-template-columns: repeat(4, 1fr); } }
+.muted { color: var(--text-muted); }
+.faint { color: var(--text-faint); }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+/* ---------- buttons ---------- */
+.btn {
+  --g-top:    color-mix(in srgb, var(--surface-raised), var(--overlay-top) calc(var(--sheen) * 5));
+  --g-bottom: color-mix(in srgb, var(--surface-raised), var(--bg-sunken) calc(var(--sheen) * 3));
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, var(--g-top), var(--g-bottom));
+  box-shadow: inset 0 1px 0 var(--edge-light), inset 0 -1px 0 var(--edge-dark);
+  color: var(--text);
+  font-size: var(--text-md); line-height: 1.4; white-space: nowrap; text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+}
+.btn:hover  { --g-top: var(--overlay); --g-bottom: color-mix(in srgb, var(--overlay), var(--bg-sunken) calc(var(--sheen) * 2)); color: var(--text); }
+.btn:active { transform: translateY(1px); --g-top: var(--g-bottom); box-shadow: inset 0 1px 3px var(--press); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* primary: the bright parchment button, the one main action per screen */
+.btn-primary {
+  --g-top:    color-mix(in srgb, var(--accent), white 14%);   /* white keeps the highlight on top in every palette */
+  --g-bottom: var(--accent);
+  color: var(--on-accent); border-color: var(--accent); font-weight: 700;
+}
+.btn-primary:hover { --g-top: color-mix(in srgb, var(--accent), white 8%); --g-bottom: color-mix(in srgb, var(--accent), var(--bg-sunken) 8%); color: var(--on-accent); }
+
+/* accent: the soft mark color, for secondary emphasis (e.g. "Create task") */
+.btn-accent {
+  --g-top:    color-mix(in srgb, var(--mark), white 10%);
+  --g-bottom: var(--mark);
+  color: var(--on-mark); border-color: var(--mark-hover);
+}
+.btn-accent:hover { --g-top: color-mix(in srgb, var(--mark-hover), white 10%); --g-bottom: var(--mark-hover); color: var(--on-mark); }
+.btn-primary:active, .btn-accent:active { --g-top: var(--g-bottom); }
+
+.btn-outline { background: transparent; box-shadow: none; }
+.btn-outline:hover { background: var(--overlay); }
+
+.btn-ghost { background: transparent; box-shadow: none; border-color: transparent; color: var(--text-muted); }
+.btn-ghost:hover { background: var(--overlay); color: var(--text); }
+
+.btn-danger  { background: color-mix(in srgb, var(--alert) 8%, transparent); border-color: color-mix(in srgb, var(--alert) 45%, transparent); color: var(--alert); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--alert) 10%, transparent); }
+.btn-danger:hover  { background: color-mix(in srgb, var(--alert) 16%, transparent); border-color: var(--alert); color: var(--alert); }
+.btn-success { background: color-mix(in srgb, var(--clear) 8%, transparent); border-color: color-mix(in srgb, var(--clear) 45%, transparent); color: var(--clear); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--clear) 10%, transparent); }
+.btn-success:hover { background: color-mix(in srgb, var(--clear) 16%, transparent); border-color: var(--clear); color: var(--clear); }
+
+.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-sm); }
+.btn-lg { padding: var(--space-3) var(--space-5); font-size: var(--text-lg); }
+.btn-icon { padding: var(--space-2); width: 36px; height: 36px; }
+
+/* ---------- form fields ---------- */
+.label { display: block; margin-bottom: var(--space-1); font-size: var(--text-sm); color: var(--text-muted); }
+/* optional engraved look for small field labels: <label class="label label-caps"> */
+.label-caps { font-size: var(--text-xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--text-faint); }
+
+.input, .textarea, .select {
+  width: 100%; padding: var(--space-2) var(--space-3);
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  box-shadow: inset 0 1px 2px var(--edge-dark);
+  transition: border-color var(--transition), background var(--transition);
+}
+.input::placeholder, .textarea::placeholder { color: var(--text-faint); }
+.input:focus, .textarea:focus, .select:focus { background: var(--surface-raised); border-color: var(--mark); outline: none; box-shadow: 0 0 0 1px var(--mark); }
+.input:disabled, .textarea:disabled, .select:disabled { opacity: 0.45; cursor: not-allowed; }
+.textarea { resize: vertical; min-height: 96px; }
+.select { appearance: none; cursor: pointer; padding-right: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
+.input-error { border-color: var(--alert); }
+.field-error { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--alert); }
+
+/* ---------- cards ---------- */
+.card { padding: var(--space-4); background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: inset 0 1px 0 var(--edge-light); }
+.card-soft { background: var(--surface); box-shadow: none; }
+.card-sunken { background: var(--bg-sunken); box-shadow: inset 0 1px 3px var(--edge-dark); }
+.card-hover { cursor: pointer; transition: border-color var(--transition), background var(--transition); }
+/* only the top, right and bottom borders change, so a .card-edge keeps its colored left edge */
+.card-hover:hover { border-top-color: var(--border-strong); border-right-color: var(--border-strong); border-bottom-color: var(--border-strong); background: var(--overlay); }
+
+/* a task-style card: coloured left edge carries priority or status */
+.card-edge { border-left: 2px solid var(--mark); }
+.edge-info  { border-left-color: var(--info); }
+.edge-warn  { border-left-color: var(--warn); }
+.edge-clear { border-left-color: var(--clear); }
+.edge-alert { border-left-color: var(--alert); }
+
+.stat { padding: var(--space-4) var(--space-5); background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: inset 0 1px 0 var(--edge-light); }
+.stat-value { display: block; padding-block: var(--space-2); font-size: var(--text-2xl); font-weight: 700; line-height: 1; }
+
+/* ---------- tags, badges, status ---------- */
+.tag { display: inline-flex; align-items: center; padding: 0 var(--space-2); font-size: var(--text-sm);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text-muted); }
+.tag-info  { color: var(--info);  border-color: color-mix(in srgb, var(--info) 45%, transparent);  background: color-mix(in srgb, var(--info) 10%, transparent); }
+.tag-warn  { color: var(--warn);  border-color: color-mix(in srgb, var(--warn) 45%, transparent);  background: color-mix(in srgb, var(--warn) 10%, transparent); }
+.tag-clear { color: var(--clear); border-color: color-mix(in srgb, var(--clear) 45%, transparent); background: color-mix(in srgb, var(--clear) 10%, transparent); }
+.tag-alert { color: var(--alert); border-color: color-mix(in srgb, var(--alert) 50%, transparent); background: color-mix(in srgb, var(--alert) 10%, transparent); }
+.tag-mark  { color: var(--text); border-color: var(--mark); background: color-mix(in srgb, var(--mark) 14%, transparent); }
+
+/* small status dot, pairs with a tag. Add .pulse for live states. */
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: var(--radius-full); background: var(--text-faint); flex-shrink: 0; }
+.dot-info  { background: var(--info); }
+.dot-warn  { background: var(--warn); }
+.dot-clear { background: var(--clear); }
+.dot-alert { background: var(--alert); }
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+/* ---------- messages and toasts ---------- */
+.notice { padding: var(--space-3) var(--space-4); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); }
+.notice-error   { border-color: var(--alert); color: var(--alert); }
+.notice-success { border-color: var(--clear); color: var(--clear); }
+.toast-area { position: fixed; top: var(--space-4); right: var(--space-4); z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--space-2); width: 340px; max-width: 90vw; }
+.toast { padding: var(--space-2) var(--space-4); background: var(--overlay-top); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: inset 0 1px 0 var(--edge-light); font-size: var(--text-sm); }
+.toast-error   { border-color: color-mix(in srgb, var(--alert) 50%, transparent); color: var(--alert); }
+.toast-success { border-color: color-mix(in srgb, var(--clear) 45%, transparent); color: var(--clear); }
+.toast-info    { border-color: color-mix(in srgb, var(--info) 45%, transparent);  color: var(--info); }
+
+/* ---------- loading ---------- */
+.spinner { width: 40px; height: 40px; border: 3px solid var(--overlay); border-top-color: var(--mark); border-radius: var(--radius-full); animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.skeleton { border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--surface) 25%, var(--overlay) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ---------- progress ---------- */
+.progress { height: 4px; background: var(--overlay); border-radius: 2px; overflow: hidden; }
+.progress > span { display: block; height: 100%; background: var(--mark); border-radius: 2px; transition: width 0.3s ease; }
+.progress-clear > span { background: var(--clear); }
+.progress-alert > span { background: var(--alert); }
+
+/* ---------- dividers ---------- */
+.hr-strong { background: var(--border-strong); }
+.hr-mark   { background: var(--mark); }
+
+/* ---------- text extras ---------- */
+.code { padding: 1px var(--space-2); background: var(--bg-sunken); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: var(--text-sm); }
+.code-block { padding: var(--space-4); background: var(--bg-sunken); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: var(--text-sm); line-height: 1.6; overflow-x: auto; white-space: pre; }
+.quote { margin: var(--space-4) 0; padding: var(--space-2) var(--space-4); border-left: 2px solid var(--mark); color: var(--text-muted); line-height: 1.6; }
+.kbd { display: inline-flex; align-items: center; padding: 1px 6px; font-size: var(--text-xs); color: var(--text-muted);
+  border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 3px; background: var(--surface); }
+
+/* ---------- tooltip: <span class="tip" data-tip="text">...</span> ---------- */
+.tip { position: relative; }
+.tip::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  padding: var(--space-1) var(--space-2); background: var(--overlay-top); border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  color: var(--text); font-size: var(--text-xs); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
+.tip:hover::after, .tip:focus-visible::after { opacity: 1; }
+
+/* ---------- pagination ---------- */
+.pagination { display: flex; align-items: center; gap: var(--space-1); }
+.pagination button { padding: var(--space-1) 10px; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-muted); font-size: var(--text-sm); cursor: pointer; transition: border-color var(--transition), color var(--transition); }
+.pagination button:hover { border-color: var(--border-strong); color: var(--text); }
+.pagination button.active { border-color: var(--mark); color: var(--text); background: color-mix(in srgb, var(--mark) 14%, transparent); }
+.pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ---------- page shell: <main class="page"><div class="container">...</div></main> ---------- */
+.page { min-height: 100vh; padding-block: var(--space-6) var(--space-8); }
+.page-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--space-4);
+  padding-bottom: var(--space-5); margin-bottom: var(--space-5); border-bottom: 1px solid var(--border); }
+
+/* ---------- empty and error states ---------- */
+.empty { padding: var(--space-6) var(--space-4); text-align: center; background: var(--surface); border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+.empty-title { color: var(--text); margin-bottom: var(--space-1); }
+.empty-error { border-color: color-mix(in srgb, var(--alert) 45%, transparent); }
+.empty-error .empty-title { color: var(--alert); }
+
+/* ---------- modal ---------- */
+.modal-backdrop { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: var(--space-4);
+  background: color-mix(in srgb, var(--bg-sunken) 78%, transparent); }
+.modal { width: 100%; max-width: 480px; padding: var(--space-5); background: var(--overlay); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); box-shadow: inset 0 1px 0 var(--edge-light), var(--shadow-pop); }
+
+/* ---------- accessibility helper: text for screen readers only ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

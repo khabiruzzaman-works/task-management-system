@@ -21,9 +21,19 @@ export default function Edit_task_as_worker() {
 
   if (!the_task) {
     return (
-      <div className="text-center text-3xl text-red-400 bg-white px-5 py-2.5">
-        Couldn't find the task !!!!
-      </div>
+      <main className="page">
+        <div className="container container-narrow">
+          <div className="empty empty-error">
+            <p className="empty-title">Couldn't find this task.</p>
+            <p className="muted">It may have been removed or reassigned.</p>
+            <div className="row justify-center" style={{ marginTop: "var(--space-4)" }}>
+              <button className="btn btn-sm" onClick={() => navigate("/worker")}>
+                Back to my tasks
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
   async function submit_handler(e) {
@@ -55,108 +65,84 @@ export default function Edit_task_as_worker() {
   const is_allowed_status = is_available_status[the_task.status];
   const is_out_of_option = is_allowed_status.length === 0;
   return (
-    <>
-      <main className="min-h-screen w-full bg-canvas">
-        <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
-          <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              Update task
-            </h1>
+    <main className="page">
+      <div className="container container-narrow">
+        <header className="page-header">
+          <h1>Update task</h1>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={function () {
+              navigate("/worker");
+            }}
+          >
+            back
+          </button>
+        </header>
+
+        <form onSubmit={submit_handler} className="card stack">
+          <div>
+            <span className="label label-caps">title</span>
+            <h2>{the_task?.title}</h2>
+          </div>
+
+          <div>
+            <span className="label label-caps">description</span>
+            <p className="muted">{the_task?.description}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-x-10 gap-y-4">
+            <div>
+              <span className="label label-caps">priority</span>
+              <span className="tag capitalize">{the_task?.priority}</span>
+            </div>
+            <div>
+              <span className="label label-caps">worker</span>
+              <span>{the_task?.assigned_to?.name}</span>
+            </div>
+            <div>
+              <span className="label label-caps">manager</span>
+              <span>{the_task?.manager?.name}</span>
+            </div>
+          </div>
+
+          <div>
+            <label className="label label-caps" htmlFor="status">status</label>
+            <select
+              id="status"
+              className="select"
+              name="status"
+              disabled={is_out_of_option}
+              value={form.status ?? the_task.status}
+              onChange={input_handler}
+            >
+              <option value={the_task.status}>{the_task.status} (currently)</option>
+              {is_allowed_status.map(function (s, index) {
+                return (
+                  <option key={index} value={s}>
+                    {s}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="row justify-end">
             <button
               type="button"
-              className="btn btn-sm btn-ghost"
+              className="btn btn-md btn-ghost"
               onClick={function () {
                 navigate("/worker");
               }}
             >
-              back
+              Cancel
+            </button>
+            <button className="btn btn-md btn-primary" type="submit">
+              Save changes
             </button>
           </div>
-
-          <hr className="hr-hairline" />
-
-          <form
-            onSubmit={submit_handler}
-            className="card-vintage flex flex-col gap-5 mt-6"
-          >
-            <div>
-              <span className="label-vintage">title</span>
-              <h2 className="text-heading-md font-bold text-parchment">
-                {the_task?.title}
-              </h2>
-            </div>
-
-            <div>
-              <span className="label-vintage">description</span>
-              <p className="text-caption-md leading-normal text-prose">
-                {the_task?.description}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-x-10 gap-y-5">
-              <div>
-                <span className="label-vintage">priority</span>
-                <span className="tag-vintage capitalize">
-                  {the_task?.priority}
-                </span>
-              </div>
-              <div>
-                <span className="label-vintage">worker</span>
-                <span className="text-body-md leading-normal text-chalk">
-                  {the_task?.assigned_to?.name}
-                </span>
-              </div>
-              <div>
-                <span className="label-vintage">manager</span>
-                <span className="text-body-md leading-normal text-chalk">
-                  {the_task?.manager?.name}
-                </span>
-              </div>
-            </div>
-
-            <hr className="hr-hairline" />
-
-            <div>
-              <label className="label-vintage">status</label>
-              <select
-                className="select-vintage"
-                name="status"
-                disabled={is_out_of_option}
-                value={form.status ?? the_task.status}
-                onChange={input_handler}
-              >
-                <option value={the_task.status}>
-                  {the_task.status} (currently)
-                </option>
-                {is_allowed_status.map(function (s, index) {
-                  return (
-                    <option key={index} value={s}>
-                      {s}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            <hr className="hr-hairline" />
-
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                className="btn btn-md btn-ghost"
-                onClick={function () {
-                  navigate("/worker");
-                }}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-md btn-primary" type="submit">
-                Save edits
-              </button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </>
+        </form>
+      </div>
+    </main>
   );
 }

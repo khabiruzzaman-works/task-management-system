@@ -21,9 +21,19 @@ export default function Edit_task_as_admin() {
   });
   if (!the_task) {
     return (
-      <div className="text-center text-3xl text-red-400 bg-white px-5 py-2.5">
-        Couldn't find the task !!!!
-      </div>
+      <main className="page">
+        <div className="container container-narrow">
+          <div className="empty empty-error">
+            <p className="empty-title">Couldn't find this task.</p>
+            <p className="muted">It may have been removed.</p>
+            <div className="row justify-center" style={{ marginTop: "var(--space-4)" }}>
+              <button className="btn btn-sm" onClick={() => navigate("/admin")}>
+                Back to all tasks
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
   const managers = employee.filter(function (user) {
@@ -76,139 +86,129 @@ export default function Edit_task_as_admin() {
     the_task.status === "pending" || the_task.status === "in_progress";
 
   return (
-    <>
-      <main className="min-h-screen w-full bg-canvas">
-        <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
-          <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              Edit task
-            </h1>
-            <button
-              type="button"
-              className="btn btn-sm btn-ghost"
-              onClick={function () {
-                navigate("/admin");
-              }}
-            >
-              back
-            </button>
+    <main className="page">
+      <div className="container container-narrow">
+        <header className="page-header">
+          <h1>Edit task</h1>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={function () {
+              navigate("/admin");
+            }}
+          >
+            back
+          </button>
+        </header>
+
+        <form onSubmit={submit_handler} className="card stack">
+          <div>
+            <label className="label label-caps" htmlFor="title">title</label>
+            <input
+              id="title"
+              className="input"
+              type="text"
+              name="title"
+              disabled={!can_edit}
+              placeholder="Task title"
+              value={form.title ?? the_task.title}
+              onChange={input_handler}
+              required
+            />
           </div>
 
-          <hr className="hr-hairline" />
+          <div>
+            <label className="label label-caps" htmlFor="description">description</label>
+            <textarea
+              id="description"
+              className="textarea"
+              rows={4}
+              name="description"
+              disabled={!can_edit}
+              placeholder="What needs to be done"
+              value={form.description ?? the_task.description}
+              onChange={input_handler}
+              required
+            />
+          </div>
 
-          <form
-            onSubmit={submit_handler}
-            className="card-vintage flex flex-col gap-5 mt-6"
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="label-vintage">title</label>
-              <input
-                className="input-vintage"
-                type="text"
-                name="title"
-                disabled={!can_edit}
-                placeholder="Task title"
-                value={form.title ?? the_task.title}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label-vintage">description</label>
-              <textarea
-                className="textarea-vintage"
-                rows={4}
-                name="description"
-                disabled={!can_edit}
-                placeholder="What needs to be done"
-                value={form.description ?? the_task.description}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
-                <label className="label-vintage">priority</label>
-                <select
-                  className="select-vintage"
-                  name="priority"
-                  disabled={!can_edit}
-                  value={form.priority ?? the_task.priority}
-                  onChange={input_handler}
-                >
-                  <option value="high">high</option>
-                  <option value="low">low</option>
-                  <option value="urgent">urgent</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="label-vintage">status</label>
-                <select
-                  className="select-vintage"
-                  name="status"
-                  disabled={is_out_of_option}
-                  value={form.status ?? the_task.status}
-                  onChange={input_handler}
-                >
-                  <option value={the_task.status}>
-                    {the_task.status} (currently)
-                  </option>
-                  {is_allowed_status.map(function (s, index) {
-                    return (
-                      <option key={index} value={s}>
-                        {s}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div>
-
-            <hr className="hr-hairline" />
-
-            <div>
-              <label className="label-vintage">manager</label>
+              <label className="label label-caps" htmlFor="priority">priority</label>
               <select
-                className="select-vintage"
-                name="manager_email"
-                disabled={!can_change_manager}
-                value={form.manager_email ?? the_task?.manager?.email}
+                id="priority"
+                className="select"
+                name="priority"
+                disabled={!can_edit}
+                value={form.priority ?? the_task.priority}
                 onChange={input_handler}
-                required
               >
-                <option value="">select a manager</option>
-                {managers.map(function (manager) {
+                <option value="high">high</option>
+                <option value="low">low</option>
+                <option value="urgent">urgent</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="status">status</label>
+              <select
+                id="status"
+                className="select"
+                name="status"
+                disabled={is_out_of_option}
+                value={form.status ?? the_task.status}
+                onChange={input_handler}
+              >
+                <option value={the_task.status}>{the_task.status} (currently)</option>
+                {is_allowed_status.map(function (s, index) {
                   return (
-                    <option key={manager.email} value={manager.email}>
-                      {manager.name}
+                    <option key={index} value={s}>
+                      {s}
                     </option>
                   );
                 })}
               </select>
             </div>
+          </div>
 
-            <hr className="hr-hairline" />
+          <div>
+            <label className="label label-caps" htmlFor="manager_email">manager</label>
+            <select
+              id="manager_email"
+              className="select"
+              name="manager_email"
+              disabled={!can_change_manager}
+              value={form.manager_email ?? the_task?.manager?.email}
+              onChange={input_handler}
+              required
+            >
+              <option value="">select a manager</option>
+              {managers.map(function (manager) {
+                return (
+                  <option key={manager.email} value={manager.email}>
+                    {manager.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
 
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                className="btn btn-md btn-ghost"
-                onClick={function () {
-                  navigate("/admin");
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="btn btn-md btn-primary">
-                Save edited task
-              </button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </>
+          <div className="row justify-end">
+            <button
+              type="button"
+              className="btn btn-md btn-ghost"
+              onClick={function () {
+                navigate("/admin");
+              }}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-md btn-primary">
+              Save changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
   );
 }

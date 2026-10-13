@@ -27,88 +27,80 @@ export default function Register_worker() {
     navigate("/admin");
   }
   return (
-    <>
-      <main className="min-h-screen w-full bg-canvas">
-        <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
-          <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              Register worker
-            </h1>
+    <main className="page">
+      <div className="container container-narrow">
+        <header className="page-header">
+          <h1>Register worker</h1>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={function () {
+              navigate("/admin");
+            }}
+          >
+            back
+          </button>
+        </header>
+
+        <form onSubmit={form_handler} className="card stack">
+          <div>
+            <label className="label label-caps" htmlFor="name">worker's name</label>
+            <input
+              id="name"
+              className="input"
+              type="text"
+              name="name"
+              placeholder="Worker's name"
+              value={form.name}
+              onChange={input_handler}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label label-caps" htmlFor="email">worker's email</label>
+            <input
+              id="email"
+              className="input"
+              type="email"
+              name="email"
+              placeholder="*****@kr.org"
+              value={form.email}
+              onChange={input_handler}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label label-caps" htmlFor="password">password</label>
+            <input
+              id="password"
+              className="input"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={input_handler}
+              required
+            />
+          </div>
+
+          <div className="row justify-end">
             <button
               type="button"
-              className="btn btn-sm btn-ghost"
+              className="btn btn-md btn-ghost"
               onClick={function () {
                 navigate("/admin");
               }}
             >
-              back
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-md btn-primary">
+              Register worker
             </button>
           </div>
-
-          <hr className="hr-hairline" />
-
-          <form
-            onSubmit={form_handler}
-            className="card-vintage flex flex-col gap-5 mt-6"
-          >
-            <div>
-              <label className="label-vintage">worker's name</label>
-              <input
-                className="input-vintage"
-                type="text"
-                name="name"
-                placeholder="Worker's name"
-                value={form.name}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label-vintage">worker's email</label>
-              <input
-                className="input-vintage"
-                type="email"
-                name="email"
-                placeholder="*****@kr.org"
-                value={form.email}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label-vintage">password</label>
-              <input
-                className="input-vintage"
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <hr className="hr-hairline" />
-
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                className="btn btn-md btn-ghost"
-                onClick={function () {
-                  navigate("/admin");
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="btn btn-md btn-primary">
-                Register worker
-              </button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </>
+        </form>
+      </div>
+    </main>
   );
 }

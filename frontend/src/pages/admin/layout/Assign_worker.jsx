@@ -39,12 +39,10 @@ export default function Assign_worker() {
   });
 
   return (
-    <main className="min-h-screen w-full bg-canvas">
-      <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
-        <div className="flex justify-between items-center pb-6">
-          <h1 className="text-title-lg font-bold text-parchment">
-            Assign worker
-          </h1>
+    <main className="page">
+      <div className="container container-narrow">
+        <header className="page-header">
+          <h1>Assign worker</h1>
           <button
             type="button"
             className="btn btn-sm btn-ghost"
@@ -52,18 +50,14 @@ export default function Assign_worker() {
           >
             back
           </button>
-        </div>
+        </header>
 
-        <hr className="hr-hairline" />
-
-        <form
-          onSubmit={submit_handler}
-          className="card-vintage flex flex-col gap-5 mt-6"
-        >
+        <form onSubmit={submit_handler} className="card stack">
           <div>
-            <label className="label-vintage">worker</label>
+            <label className="label label-caps" htmlFor="worker">worker</label>
             <select
-              className="select-vintage"
+              id="worker"
+              className="select"
               value={worker_email}
               onChange={(e) => set_worker_email(e.target.value)}
               required
@@ -78,9 +72,10 @@ export default function Assign_worker() {
           </div>
 
           <div>
-            <label className="label-vintage">manager</label>
+            <label className="label label-caps" htmlFor="manager">manager</label>
             <select
-              className="select-vintage"
+              id="manager"
+              className="select"
               value={manager_email}
               onChange={(e) => set_manager_email(e.target.value)}
               required
@@ -94,14 +89,8 @@ export default function Assign_worker() {
             </select>
           </div>
 
-          <hr className="hr-hairline" />
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-md btn-primary"
-              disabled={submitting}
-            >
+          <div className="row justify-end">
+            <button type="submit" className="btn btn-md btn-primary" disabled={submitting}>
               {submitting ? "Assigning..." : "Assign"}
             </button>
           </div>
