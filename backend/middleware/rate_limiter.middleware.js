@@ -1,6 +1,6 @@
 import rate_limiter from "express-rate-limit";
 
-function limiter(time, count, message, code) {
+function limiter({time, count, message, code}) {
   return rate_limiter({
     windowMs: time * 60 * 1000,
     limit: count,

@@ -18,11 +18,7 @@ export default function Login() {
     });
   }
   if (user_loading) {
-    return (
-      <>
-        <Loading_screen />
-      </>
-    );
+    return <Loading_screen />;
   }
 
   async function form_handler(e) {
@@ -44,28 +40,20 @@ export default function Login() {
     }
   }
   return (
-    <>
-      <main className="min-h-screen w-full bg-canvas flex items-center justify-center px-8">
-        <div className="w-full max-w-[400px]">
-          <div className="pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              Task manager
-            </h1>
-            <p className="text-caption-md leading-normal text-fade">
-              Log in to continue.
-            </p>
+    <main className="page flex items-center justify-center">
+      <div className="container" style={{ maxWidth: "400px" }}>
+        <div className="stack">
+          <div>
+            <h1>Task manager</h1>
+            <p className="muted">Log in to continue.</p>
           </div>
 
-          <hr className="hr-hairline" />
-
-          <form
-            onSubmit={form_handler}
-            className="card-vintage flex flex-col gap-5 mt-6"
-          >
+          <form onSubmit={form_handler} className="card stack">
             <div>
-              <label className="label-vintage">email</label>
+              <label className="label label-caps" htmlFor="email">email</label>
               <input
-                className="input-vintage"
+                id="email"
+                className="input"
                 type="email"
                 name="email"
                 placeholder="*****@kr.org"
@@ -76,9 +64,10 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="label-vintage">password</label>
+              <label className="label label-caps" htmlFor="password">password</label>
               <input
-                className="input-vintage"
+                id="password"
+                className="input"
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -88,16 +77,14 @@ export default function Login() {
               />
             </div>
 
-            <hr className="hr-hairline" />
-
-            <div className="flex justify-end">
+            <div className="row justify-end">
               <button type="submit" className="btn btn-md btn-primary">
-                Login
+                Log in
               </button>
             </div>
           </form>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

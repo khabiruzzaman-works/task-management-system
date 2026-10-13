@@ -6,10 +6,10 @@ export function useToast() {
   return useContext(toast_context);
 }
 
-const TYPE_STYLE = {
-  error: "border-alert/50 text-alert",
-  success: "border-clear/40 text-clear",
-  info: "border-info/40 text-info",
+const TYPE_CLASS = {
+  error: "toast-error",
+  success: "toast-success",
+  info: "toast-info",
 };
 
 export function Toast_Provider({ children }) {
@@ -40,17 +40,18 @@ export function Toast_Provider({ children }) {
     <toast_context.Provider value={{ notify }}>
       {children}
 
-      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 w-[340px] max-w-[90vw]">
+      <div className="toast-area" role="status" aria-live="polite">
         {toasts.map(function (t) {
           return (
             <div
               key={t.id}
-              className={`bg-plate border rounded-sm px-4 py-2 text-caption-md leading-normal flex justify-between items-start gap-3 ${TYPE_STYLE[t.type]}`}
+              className={`toast ${TYPE_CLASS[t.type] ?? ""} flex justify-between items-start gap-3`}
             >
               <span>{t.message}</span>
               <button
                 type="button"
-                className="text-dim hover:text-parchment"
+                className="muted cursor-pointer"
+                aria-label="dismiss"
                 onClick={function () {
                   remove(t.id);
                 }}

@@ -10,12 +10,12 @@ export default function Pass_change() {
   const [new_password, set_new_password] = useState("");
   const [new_password_again, set_new_password_again] = useState("");
   const [submitting, set_submitting] = useState(false);
-  const { user ,user_loading} = useAuth();
+  const { user, user_loading } = useAuth();
   const navigate = useNavigate();
   const { notify } = useToast();
   if (user_loading) {
-    return <Loading_screen/>;
-}
+    return <Loading_screen />;
+  }
 
   const max_length = 72;
   const min_length = 8;
@@ -59,31 +59,21 @@ export default function Pass_change() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-canvas">
-      <div className="max-w-[560px] mx-auto px-8 pt-8 pb-24">
-        <div className="flex justify-between items-center pb-6">
-          <h1 className="text-title-lg font-bold text-parchment">
-            Change password
-          </h1>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={go_back}
-          >
+    <main className="page">
+      <div className="container container-narrow">
+        <header className="page-header">
+          <h1>Change password</h1>
+          <button type="button" className="btn btn-sm btn-ghost" onClick={go_back}>
             back
           </button>
-        </div>
+        </header>
 
-        <hr className="hr-hairline" />
-
-        <form
-          onSubmit={password_changer}
-          className="card-vintage flex flex-col gap-5 mt-6"
-        >
+        <form onSubmit={password_changer} className="card stack">
           <div>
-            <label className="label-vintage">old password</label>
+            <label className="label label-caps" htmlFor="current_password">old password</label>
             <input
-              className="input-vintage"
+              id="current_password"
+              className="input"
               type="password"
               name="current_password"
               placeholder="••••••••"
@@ -96,9 +86,10 @@ export default function Pass_change() {
           </div>
 
           <div>
-            <label className="label-vintage">new password</label>
+            <label className="label label-caps" htmlFor="new_password">new password</label>
             <input
-              className="input-vintage"
+              id="new_password"
+              className="input"
               type="password"
               name="new_password"
               placeholder="8 to 72 characters"
@@ -111,9 +102,10 @@ export default function Pass_change() {
           </div>
 
           <div>
-            <label className="label-vintage">retype new password</label>
+            <label className="label label-caps" htmlFor="new_password_again">retype new password</label>
             <input
-              className="input-vintage"
+              id="new_password_again"
+              className="input"
               type="password"
               name="new_password_again"
               placeholder="••••••••"
@@ -125,21 +117,11 @@ export default function Pass_change() {
             />
           </div>
 
-          <hr className="hr-hairline" />
-
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              className="btn btn-md btn-ghost"
-              onClick={go_back}
-            >
+          <div className="row justify-end">
+            <button type="button" className="btn btn-md btn-ghost" onClick={go_back}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className="btn btn-md btn-primary"
-              disabled={submitting}
-            >
+            <button type="submit" className="btn btn-md btn-primary" disabled={submitting}>
               {submitting ? "Changing..." : "Change password"}
             </button>
           </div>

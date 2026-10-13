@@ -24,73 +24,61 @@ export default function Demotion() {
   }
 
   if (employee_loading) {
-    return <Loading_screen/>;
+    return <Loading_screen />;
   }
 
-  const workers = employee.filter(function (worker) {
-    return worker.role === "manager";
+  const managers = employee.filter(function (user) {
+    return user.role === "manager";
   });
 
   return (
-    <>
-      <main className="min-h-screen w-full bg-canvas">
-        <div className="max-w-[700px] mx-auto px-8 pt-8 pb-24">
-          <div className="flex justify-between items-center pb-6">
-            <h1 className="text-title-lg font-bold text-parchment">
-              demote worker
-            </h1>
-            <button
-              className="btn btn-sm btn-primary"
-              onClick={() => navigate("/admin")}
-            >
-              Back
-            </button>
-          </div>
+    <main className="page">
+      <div className="container" style={{ maxWidth: "700px" }}>
+        <header className="page-header">
+          <h1>Demote manager</h1>
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => navigate("/admin")}
+          >
+            back
+          </button>
+        </header>
 
-          <hr className="hr-hairline" />
+        <div className="flex flex-col gap-3">
+          {managers.length === 0 && (
+            <div className="empty">
+              <p className="empty-title">No managers to demote.</p>
+            </div>
+          )}
 
-          <div className="flex flex-col gap-3 mt-6">
-            {workers.length === 0 && (
-              <p className="text-caption-md leading-normal text-fade">
-                No workers to demote
-              </p>
-            )}
-
-            {workers.map(function (worker) {
-              return (
-                <div
-                  key={worker._id}
-                  className="card-vintage flex justify-between items-center gap-4"
-                >
-                  <div className="min-w-0">
-                    <h3 className="text-heading-md font-bold text-parchment truncate">
-                      {worker.name}
-                    </h3>
-                    <p className="text-caption-md leading-normal text-prose truncate">
-                      {worker.email}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="tag-vintage">{worker.role}</span>
-                    <button
-                      className="btn btn-sm btn-primary"
-                      disabled={demoting_email === worker.email}
-                      onClick={function () {
-                        demote_handler(worker.email);
-                      }}
-                    >
-                      {demoting_email === worker.email
-                        ? "demoting..."
-                        : "demote"}
-                    </button>
-                  </div>
+          {managers.map(function (manager) {
+            return (
+              <div
+                key={manager._id}
+                className="card flex justify-between items-center gap-4"
+              >
+                <div className="min-w-0">
+                  <h3 className="truncate">{manager.name}</h3>
+                  <p className="muted text-sm truncate">{manager.email}</p>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="row shrink-0">
+                  <span className="tag">{manager.role}</span>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    disabled={demoting_email === manager.email}
+                    onClick={function () {
+                      demote_handler(manager.email);
+                    }}
+                  >
+                    {demoting_email === manager.email ? "Demoting..." : "Demote"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

@@ -1,0 +1,190 @@
+/* ==========================================================================
+   ASH v1.0  -  tokens.css
+   The only file that defines the look. Components never use raw colors.
+
+   Identity, in three lines:
+     1. Warm grey, never blue grey. Every neutral leans slightly brown.
+     2. Quiet by default. One soft "mark" accent, bright only when it matters.
+     3. Machined texture. Thin top highlights and bottom shades on raised
+        things, so buttons and cards feel like pressed metal, not flat paint.
+
+   HOW TO SWITCH (set on <html>):
+     <html>                                         warm ash, dark   (default)
+     <html data-theme="light">                      warm ash, light
+     <html data-palette="ink">                      ink & paper, dark
+     <html data-palette="ink" data-theme="light">   ink & paper, light
+   ========================================================================== */
+
+:root {
+  /* ---------- type ---------- */
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font: var(--font-mono);            /* change to var(--font-sans) to switch the whole project */
+
+  --text-xs: 0.75rem;                  /* 12px */
+  --text-sm: 0.875rem;                 /* 14px */
+  --text-md: 1rem;                     /* 16px */
+  --text-lg: 1.125rem;                 /* 18px */
+  --text-xl: 1.5rem;                   /* 24px */
+  --text-2xl: 2.375rem;                /* 38px */
+  --leading: 1.5;
+  --leading-tight: 1.25;
+  --tracking-caps: 0.1em;              /* only used by .label-caps */
+
+  /* ---------- spacing, shape, motion ---------- */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 96px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+  --transition: 0.2s ease;
+
+  /* ---------- layout ---------- */
+  --max-width: 1100px;
+  --max-width-narrow: 560px;
+
+  /* ---------- stacking order (never type a raw z-index) ---------- */
+  --z-dropdown: 10;
+  --z-sticky:   20;
+  --z-modal:    50;
+  --z-toast:    60;
+
+  /* ---------- status colors (same in every palette, they carry meaning) ---------- */
+  --info:  #5ac8fa;
+  --warn:  #ffb020;
+  --clear: #30d158;
+  --alert: #ff3b30;
+
+  /* ======================================================================
+     PALETTE 1: WARM ASH, DARK (default)
+     ====================================================================== */
+  color-scheme: dark;
+  --bg-sunken:      #111110;   /* wells, code blocks, sidebars */
+  --bg:             #181815;   /* page */
+  --surface:        #1f1f1c;   /* inputs, soft cards */
+  --surface-raised: #272724;   /* cards, buttons */
+  --overlay:        #30302c;   /* dropdowns, hover */
+  --overlay-top:    #3c3c38;   /* modals, tooltips */
+
+  --text:           #e4e0d6;   /* titles, body */
+  --text-muted:     #a09c92;   /* descriptions, captions */
+  --text-faint:     #86867e;   /* placeholders, hints (about 4.5:1) */
+
+  --border:         rgba(205, 200, 185, 0.10);
+  --border-strong:  rgba(205, 200, 185, 0.20);
+
+  --accent:         #e4e0d6;   /* primary button background */
+  --on-accent:      #181815;   /* text on the primary button */
+  --focus:          #e4e0d6;   /* keyboard focus ring */
+
+  /* the signature soft accent (the old "mark"): quiet active states, brackets,
+     selected items, the accent button */
+  --mark:           #8a867e;
+  --mark-hover:     #948e86;
+  --on-mark:        #181815;
+
+  /* machined texture: a light line on top of raised things, a dark line below */
+  --edge-light:     rgba(220, 215, 200, 0.08);
+  --edge-dark:      rgba(0, 0, 0, 0.30);
+  --press:          rgba(0, 0, 0, 0.45);   /* inset shadow when pressed */
+  --sheen:          6%;                    /* strength of the top-to-bottom gradient */
+  --shadow-pop:     0 12px 32px rgba(0, 0, 0, 0.5);   /* modals, menus */
+}
+
+/* ---------- WARM ASH, LIGHT ---------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-sunken:      #e6e3da;
+  --bg:             #f1efe9;
+  --surface:        #f8f6f1;
+  --surface-raised: #fdfcfa;
+  --overlay:        #e9e6dd;
+  --overlay-top:    #ffffff;
+
+  --text:           #1c1c19;
+  --text-muted:     #5e5b54;
+  --text-faint:     #6f6b63;
+
+  --border:         rgba(30, 28, 20, 0.12);
+  --border-strong:  rgba(30, 28, 20, 0.24);
+
+  --accent:         #1c1c19;
+  --on-accent:      #f1efe9;
+  --focus:          #1c1c19;
+
+  --mark:           #6f6b63;
+  --mark-hover:     #5e5b54;
+  --on-mark:        #f8f6f1;
+
+  --edge-light:     rgba(255, 255, 255, 0.85);
+  --edge-dark:      rgba(30, 28, 20, 0.10);
+  --press:          rgba(30, 28, 20, 0.18);
+  --sheen:          5%;
+  --shadow-pop:     0 12px 32px rgba(30, 28, 20, 0.18);
+}
+
+/* ======================================================================
+   PALETTE 2: INK & PAPER, DARK  (neutral, highest contrast)
+   ====================================================================== */
+:root[data-palette="ink"] {
+  color-scheme: dark;
+  --bg-sunken:      #050505;
+  --bg:             #0a0a0a;
+  --surface:        #121212;
+  --surface-raised: #1a1a1a;
+  --overlay:        #252525;
+  --overlay-top:    #303030;
+
+  --text:           #fafafa;
+  --text-muted:     #b0b0b0;
+  --text-faint:     #808080;
+
+  --border:         rgba(255, 255, 255, 0.10);
+  --border-strong:  rgba(255, 255, 255, 0.22);
+
+  --accent:         #fafafa;
+  --on-accent:      #0a0a0a;
+  --focus:          #fafafa;
+
+  --mark:           #909090;
+  --mark-hover:     #a0a0a0;
+  --on-mark:        #0a0a0a;
+
+  --edge-light:     rgba(255, 255, 255, 0.07);
+  --edge-dark:      rgba(0, 0, 0, 0.45);
+  --press:          rgba(0, 0, 0, 0.55);
+  --sheen:          5%;
+  --shadow-pop:     0 12px 32px rgba(0, 0, 0, 0.7);
+}
+
+/* ---------- INK & PAPER, LIGHT ---------- */
+:root[data-palette="ink"][data-theme="light"] {
+  color-scheme: light;
+  --bg-sunken:      #ebebeb;
+  --bg:             #fafafa;
+  --surface:        #f4f4f4;
+  --surface-raised: #ffffff;
+  --overlay:        #ececec;
+  --overlay-top:    #ffffff;
+
+  --text:           #0a0a0a;
+  --text-muted:     #4a4a4a;
+  --text-faint:     #6e6e6e;
+
+  --border:         rgba(0, 0, 0, 0.12);
+  --border-strong:  rgba(0, 0, 0, 0.26);
+
+  --accent:         #0a0a0a;
+  --on-accent:      #fafafa;
+  --focus:          #0a0a0a;
+
+  --mark:           #5a5a5a;
+  --mark-hover:     #4a4a4a;
+  --on-mark:        #fafafa;
+
+  --edge-light:     rgba(255, 255, 255, 0.9);
+  --edge-dark:      rgba(0, 0, 0, 0.10);
+  --press:          rgba(0, 0, 0, 0.20);
+  --sheen:          4%;
+  --shadow-pop:     0 12px 32px rgba(0, 0, 0, 0.18);
+}

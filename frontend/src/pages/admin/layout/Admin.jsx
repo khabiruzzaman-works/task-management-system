@@ -3,6 +3,7 @@ import { useAuth } from "../../../context/Auth.context.jsx";
 import { logout_controller } from "../../authentication/controller/logout.controller.js";
 import { useTaskCenter } from "../../../context/Task.context.jsx";
 import Task_view_card from "../../../components/Task_view_card.jsx";
+import Stat from "../../../components/Stat.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/Loading_screen.jsx";
 
@@ -25,35 +26,29 @@ export default function Admin() {
     navigate("/login");
   }
 
+  function count(status) {
+    return tasks.filter((t) => t.status === status).length;
+  }
+
   return (
-    <main className="min-h-screen w-full bg-canvas">
-      <div className="max-w-[1100px] mx-auto px-8 pt-8 pb-24">
-        {/* header */}
-        <div className="flex flex-wrap justify-between items-start gap-4 pb-6">
+    <main className="page">
+      <div className="container">
+        <header className="page-header">
           <div>
-            <h1 className="text-title-lg font-bold text-parchment">
-              Task manager
-            </h1>
-            <p className="text-caption-md leading-normal text-fade">
+            <h1>Task manager</h1>
+            <p className="muted">
               Admin overview. Everything you've created and who's on it.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="row">
             <div className="flex flex-col items-end">
-              <span className="text-body-md leading-normal text-chalk">
-                {user?.name}
-              </span>
-              <span className="text-xs leading-normal text-dim">
-                Administrator
-              </span>
+              <span>{user?.name}</span>
+              <span className="muted text-xs">Administrator</span>
             </div>
-            <span className="w-px h-8 bg-hairline-strong"></span>
             <button
               className="btn btn-sm btn-ghost"
-              onClick={function () {
-                navigate("/change-password");
-              }}
+              onClick={() => navigate("/change-password")}
             >
               Change password
             </button>
@@ -61,146 +56,78 @@ export default function Admin() {
               Log out
             </button>
           </div>
-        </div>
+        </header>
 
-        <hr className="hr-hairline" />
-
-        {/* stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Total</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-parchment">
-              {tasks.length}
-            </span>
-            <span className="text-xs leading-normal text-dim">all tasks</span>
-          </div>
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Pending</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-parchment">
-              {tasks.filter((t) => t.status === "pending").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">not started</span>
-          </div>
-          <div className="card-vintage-stats">
-            <span className="label-vintage">In progress</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-chalk">
-              {tasks.filter((t) => t.status === "in_progress").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">
-              being worked on
-            </span>
+        <div className="stack">
+          <div className="grid-stats">
+            <Stat label="Total" value={tasks.length} caption="all tasks" />
+            <Stat label="Pending" value={count("pending")} caption="not started" />
+            <Stat label="In progress" value={count("in_progress")} caption="being worked on" tone="info" />
+            <Stat label="Submitted" value={count("submitted")} caption="waiting for approval" tone="warn" />
+            <Stat label="Approved" value={count("approved")} caption="finished" tone="clear" />
+            <Stat label="Rejected" value={count("rejected")} caption="sent back" tone="alert" />
+            <Stat label="Canceled" value={count("canceled")} caption="called off" />
           </div>
 
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Submitted</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-clear">
-              {tasks.filter((t) => t.status === "submitted").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">
-              Waiting for approval
-            </span>
-          </div>
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Approved</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-clear">
-              {tasks.filter((t) => t.status === "approved").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">finished</span>
-          </div>
-
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Rejected</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-alert">
-              {tasks.filter((t) => t.status === "rejected").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">Bad work</span>
-          </div>
-
-          <div className="card-vintage-stats">
-            <span className="label-vintage">Canceled</span>
-            <span className="block text-display-xl font-bold leading-none py-2 text-ghost">
-              {tasks.filter((t) => t.status === "canceled").length}
-            </span>
-            <span className="text-xs leading-normal text-dim">called off</span>
-          </div>
-        </div>
-
-        {/* actions */}
-        <div className="card-vintage-soft grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div>
-            <span className="label-vintage">Tasks</span>
-            <div className="flex flex-wrap gap-2">
-              <button
-                className="btn btn-sm btn-accent"
-                onClick={() => navigate("/task-creation")}
-              >
-                Create task
-              </button>
+          <div className="card card-soft grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <span className="label label-caps">Tasks</span>
+              <div className="row">
+                <button
+                  className="btn btn-sm btn-accent"
+                  onClick={() => navigate("/task-creation")}
+                >
+                  Create task
+                </button>
+              </div>
+            </div>
+            <div>
+              <span className="label label-caps">People</span>
+              <div className="row">
+                <button className="btn btn-sm" onClick={() => navigate("/register-worker")}>
+                  Register worker
+                </button>
+                <button className="btn btn-sm" onClick={() => navigate("/assign-worker")}>
+                  Assign worker
+                </button>
+                <button className="btn btn-sm" onClick={() => navigate("/promote")}>
+                  Give a promotion
+                </button>
+                <button className="btn btn-sm" onClick={() => navigate("/demote")}>
+                  Give a demotion
+                </button>
+              </div>
             </div>
           </div>
-          <div>
-            <span className="label-vintage">People</span>
-            <div className="flex flex-wrap gap-2">
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => navigate("/register-worker")}
-              >
-                Register worker
-              </button>
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => navigate("/assign-worker")}
-              >
-                Assign worker
-              </button>
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => navigate("/promote")}
-              >
-                Give a promotion
-              </button>
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => navigate("/demote")}
-              >
-                Give a demotion
-              </button>
+
+          <div className="row row-between">
+            <h2>All tasks</h2>
+            <span className="muted text-sm">{tasks.length} total</span>
+          </div>
+
+          {tasks.length === 0 && (
+            <div className="empty">
+              <p className="empty-title">No tasks yet.</p>
+              <p className="muted">
+                Create one and assign it to a manager to get started.
+              </p>
             </div>
-          </div>
+          )}
+
+          {tasks.length > 0 && (
+            <div className="flex flex-col gap-2">
+              {tasks.map(function (task) {
+                return (
+                  <Task_view_card
+                    key={task._id}
+                    task={task}
+                    edit_path={`/admin/task/edit/${task._id}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
-
-        {/* tasks */}
-        <div className="flex justify-between items-baseline mt-10 pb-3">
-          <h2 className="text-title-sm font-bold text-parchment">All tasks</h2>
-          <span className="text-caption-md text-dim">{tasks.length} total</span>
-        </div>
-
-        <hr className="hr-hairline mt-0" />
-
-        {tasks.length === 0 && (
-          <div className="card-vintage-soft mt-4 py-8">
-            <p className="text-body-md leading-normal text-chalk">
-              No tasks yet.
-            </p>
-            <p className="text-caption-md leading-normal text-fade">
-              Create one and assign it to a manager to get started.
-            </p>
-          </div>
-        )}
-
-        {tasks.length > 0 && (
-          <div className="flex flex-col gap-2 mt-4">
-            {tasks.map(function (task) {
-              return (
-                <Task_view_card
-                  key={task._id}
-                  task={task}
-                  edit_path={`/admin/task/edit/${task._id}`}
-                />
-              );
-            })}
-          </div>
-        )}
       </div>
     </main>
   );
