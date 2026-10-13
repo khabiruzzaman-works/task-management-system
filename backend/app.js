@@ -21,10 +21,14 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
 app.use("/api", global_limit());
 app.use("/api/authentication", authentication_route);
 app.use("/api/user/admin", admin_route);
