@@ -36,7 +36,6 @@ export default async function login_controller(req, res) {
 
   await update_refresh_token(logged_user._id, refresh_token);
 
-
   res.cookie("refreshToken", refresh_token, cookie_options);
 
   return new App_response("login successful", 200, {

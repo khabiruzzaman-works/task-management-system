@@ -19,6 +19,7 @@ export async function refresh_token() {
         `${BASE_URL}/authentication/refresh-tokens`,
         {
           credentials: "include",
+          method:"POST",
         },
       );
 

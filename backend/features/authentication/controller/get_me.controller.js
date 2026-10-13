@@ -6,5 +6,9 @@ export async function get_me_controller(req, res) {
 
   const user_info = await get_me_service(user._id);
 
-return  new App_response("user details is fetched successfully", 200, user_info).send_response(res);
+  return new App_response(
+    "user details is fetched successfully",
+    200,
+    user_info,
+  ).send_response(res);
 }
