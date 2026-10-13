@@ -1,4 +1,4 @@
-import Admin from "./pages/admin/layout/Admin.jsx";
+import Admin from "./pages/admin/layout/Admin.jsx"
 import Worker from "./pages/worker/layout/Worker.jsx";
 import Login from "./pages/authentication/layout/Login.jsx";
 import { Auth_Provider } from "./context/Auth.context.jsx";

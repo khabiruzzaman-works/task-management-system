@@ -4,6 +4,7 @@ import { useEmployee } from "../../../context/Employee.context";
 import assign_worker_controller from "../controller/assign_worker.controller";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/Loading_screen";
+import Form_head from "../../../components/Form_head";
 
 export default function Assign_worker() {
   const { employee, employee_loading, refresh_employee } = useEmployee();
@@ -41,55 +42,63 @@ export default function Assign_worker() {
   return (
     <main className="page">
       <div className="container container-narrow">
-        <header className="page-header">
-          <h1>Assign worker</h1>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={() => navigate("/admin")}
-          >
-            back
-          </button>
-        </header>
+        <Form_head
+          eyebrow="Admin / People"
+          title="Assign worker"
+          description="Put a worker on a manager's team. Only workers without a manager are listed."
+          on_back={() => navigate("/admin")}
+        />
 
-        <form onSubmit={submit_handler} className="card stack">
-          <div>
-            <label className="label label-caps" htmlFor="worker">worker</label>
-            <select
-              id="worker"
-              className="select"
-              value={worker_email}
-              onChange={(e) => set_worker_email(e.target.value)}
-              required
-            >
-              <option value="">select a worker</option>
-              {workers.map((w) => (
-                <option key={w._id} value={w.email}>
-                  {w.name}
-                </option>
-              ))}
-            </select>
+        <form onSubmit={submit_handler} className="card form-card">
+          <div className="form-body">
+            <div className="pair">
+              <div>
+                <label className="label label-caps" htmlFor="worker">worker</label>
+                <select
+                  id="worker"
+                  className="select"
+                  value={worker_email}
+                  onChange={(e) => set_worker_email(e.target.value)}
+                  required
+                >
+                  <option value="">select a worker</option>
+                  {workers.map((w) => (
+                    <option key={w._id} value={w.email}>
+                      {w.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <span className="pair-arrow" aria-hidden="true">[&gt;]</span>
+
+              <div>
+                <label className="label label-caps" htmlFor="manager">manager</label>
+                <select
+                  id="manager"
+                  className="select"
+                  value={manager_email}
+                  onChange={(e) => set_manager_email(e.target.value)}
+                  required
+                >
+                  <option value="">select a manager</option>
+                  {managers.map((m) => (
+                    <option key={m._id} value={m.email}>
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {workers.length === 0 && (
+              <p className="notice muted text-sm">
+                Every worker already has a manager.
+              </p>
+            )}
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="manager">manager</label>
-            <select
-              id="manager"
-              className="select"
-              value={manager_email}
-              onChange={(e) => set_manager_email(e.target.value)}
-              required
-            >
-              <option value="">select a manager</option>
-              {managers.map((m) => (
-                <option key={m._id} value={m.email}>
-                  {m.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="row justify-end">
+          <div className="form-actions">
             <button type="submit" className="btn btn-md btn-primary" disabled={submitting}>
               {submitting ? "Assigning..." : "Assign"}
             </button>

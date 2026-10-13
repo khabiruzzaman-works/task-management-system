@@ -5,6 +5,7 @@ import { useTaskCenter } from "../../../context/Task.context.jsx";
 import Task_view_card from "../../../components/Task_view_card.jsx";
 import Stat from "../../../components/Stat.jsx";
 import Loading_screen from "../../../components/Loading_screen.jsx";
+import Topbar from "../../../components/Topbar.jsx";
 
 export default function Worker() {
   const navigate = useNavigate();
@@ -37,48 +38,60 @@ export default function Worker() {
   }
 
   return (
-    <main className="page">
-      <div className="container">
-        <header className="page-header">
-          <div>
+    <>
+      <Topbar
+        role_label="Worker"
+        user_name={user?.name || "name not found"}
+        on_change_password={() => navigate("/change-password")}
+        on_logout={logout_handler}
+      />
+
+      <main className="page page-dash">
+        <div className="container">
+          <div className="page-title">
+            <p className="eyebrow">Worker overview</p>
             <h1>My tasks</h1>
-          </div>
-          <div className="row">
-            <span>{user?.name || "name not found"}</span>
-            <button
-              className="btn btn-sm btn-ghost"
-              onClick={() => navigate("/change-password")}
-            >
-              Change password
-            </button>
-            <button className="btn btn-sm btn-outline" onClick={logout_handler}>
-              Log out
-            </button>
-          </div>
-        </header>
-
-        <div className="stack">
-          <div className="grid-stats">
-            <Stat label="Total" value={worker_tasks.length} caption="all tasks" />
-            <Stat label="In progress" value={count("in_progress")} caption="being worked on" tone="info" />
-            <Stat label="Submitted" value={count("submitted")} caption="waiting for approval" tone="warn" />
-            <Stat label="Approved" value={count("approved")} caption="finished" tone="clear" />
-            <Stat label="Rejected" value={count("rejected")} caption="sent back" tone="alert" />
+            <p className="muted">Everything assigned to you and where it stands.</p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            {worker_tasks.map(function (task) {
-              return (
-                <Task_view_card
-                  key={task._id}
-                  task={task}
-                  edit_path={`/worker/task/edit/${task._id}`}
-                />
-              );
-            })}
+          <div className="stack">
+            <div className="grid-stats">
+              <Stat label="Total" value={worker_tasks.length} caption="all tasks" />
+              <Stat label="In progress" value={count("in_progress")} caption="being worked on" tone="info" />
+              <Stat label="Submitted" value={count("submitted")} caption="waiting for approval" tone="warn" />
+              <Stat label="Approved" value={count("approved")} caption="finished" tone="clear" />
+              <Stat label="Rejected" value={count("rejected")} caption="sent back" tone="alert" />
+            </div>
+
+            <div className="section-head">
+              <h2>Assigned to you</h2>
+              <span className="faint text-sm">{worker_tasks.length} total</span>
+            </div>
+
+            {worker_tasks.length === 0 && (
+              <div className="empty">
+                <p className="empty-mark">[ ]</p>
+                <p className="empty-title">Nothing assigned yet.</p>
+                <p className="muted">
+                  When your manager gives you a task, it will show up here.
+                </p>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-3">
+              {worker_tasks.map(function (task) {
+                return (
+                  <Task_view_card
+                    key={task._id}
+                    task={task}
+                    edit_path={`/worker/task/edit/${task._id}`}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

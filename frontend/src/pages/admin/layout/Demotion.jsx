@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import demotion_controller from "../controller/demotion.controller";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/Loading_screen";
+import Form_head from "../../../components/Form_head";
 
 export default function Demotion() {
   const { employee, employee_loading, refresh_employee } = useEmployee();
@@ -33,36 +34,41 @@ export default function Demotion() {
 
   return (
     <main className="page">
-      <div className="container" style={{ maxWidth: "700px" }}>
-        <header className="page-header">
-          <h1>Demote manager</h1>
-          <button
-            className="btn btn-sm btn-ghost"
-            onClick={() => navigate("/admin")}
-          >
-            back
-          </button>
-        </header>
+      <div className="container container-medium">
+        <Form_head
+          eyebrow="Admin / People"
+          title="Demote manager"
+          description="Demoting a manager makes them a worker."
+          on_back={() => navigate("/admin")}
+        />
 
-        <div className="flex flex-col gap-3">
+        <div className="section-head">
+          <h2>Managers</h2>
+          <span className="faint text-sm">{managers.length} total</span>
+        </div>
+
+        <div className="flex flex-col gap-3 pt-4">
           {managers.length === 0 && (
             <div className="empty">
+              <p className="empty-mark">[ ]</p>
               <p className="empty-title">No managers to demote.</p>
             </div>
           )}
 
           {managers.map(function (manager) {
             return (
-              <div
-                key={manager._id}
-                className="card flex justify-between items-center gap-4"
-              >
-                <div className="min-w-0">
-                  <h3 className="truncate">{manager.name}</h3>
-                  <p className="muted text-sm truncate">{manager.email}</p>
+              <div key={manager._id} className="card person">
+                <div className="person-main">
+                  <span className="avatar avatar-lg" aria-hidden="true">
+                    {(manager.name || "?").trim().charAt(0)}
+                  </span>
+                  <div>
+                    <h3 className="truncate">{manager.name}</h3>
+                    <p className="muted text-sm truncate">{manager.email}</p>
+                  </div>
                 </div>
 
-                <div className="row shrink-0">
+                <div className="row">
                   <span className="tag">{manager.role}</span>
                   <button
                     className="btn btn-sm btn-danger"

@@ -4,6 +4,7 @@ import promotion_controller from "../controller/promotion.controller";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/Loading_screen";
+import Form_head from "../../../components/Form_head";
 
 export default function Promotion() {
   const { employee, employee_loading, refresh_employee } = useEmployee();
@@ -32,36 +33,41 @@ export default function Promotion() {
 
   return (
     <main className="page">
-      <div className="container" style={{ maxWidth: "700px" }}>
-        <header className="page-header">
-          <h1>Promote worker</h1>
-          <button
-            className="btn btn-sm btn-ghost"
-            onClick={() => navigate("/admin")}
-          >
-            back
-          </button>
-        </header>
+      <div className="container container-medium">
+        <Form_head
+          eyebrow="Admin / People"
+          title="Promote worker"
+          description="Promoting a worker makes them a manager."
+          on_back={() => navigate("/admin")}
+        />
 
-        <div className="flex flex-col gap-3">
+        <div className="section-head">
+          <h2>Workers</h2>
+          <span className="faint text-sm">{workers.length} total</span>
+        </div>
+
+        <div className="flex flex-col gap-3 pt-4">
           {workers.length === 0 && (
             <div className="empty">
+              <p className="empty-mark">[ ]</p>
               <p className="empty-title">No workers to promote.</p>
             </div>
           )}
 
           {workers.map(function (worker) {
             return (
-              <div
-                key={worker._id}
-                className="card flex justify-between items-center gap-4"
-              >
-                <div className="min-w-0">
-                  <h3 className="truncate">{worker.name}</h3>
-                  <p className="muted text-sm truncate">{worker.email}</p>
+              <div key={worker._id} className="card person">
+                <div className="person-main">
+                  <span className="avatar avatar-lg" aria-hidden="true">
+                    {(worker.name || "?").trim().charAt(0)}
+                  </span>
+                  <div>
+                    <h3 className="truncate">{worker.name}</h3>
+                    <p className="muted text-sm truncate">{worker.email}</p>
+                  </div>
                 </div>
 
-                <div className="row shrink-0">
+                <div className="row">
                   <span className="tag">{worker.role}</span>
                   <button
                     className="btn btn-sm"

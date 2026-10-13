@@ -1,23 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import { Priority_tag, Status_tag } from "./Task_badges.jsx";
 
 const PRIORITY = {
-  urgent: { tag: "tag-alert", marker: "[!]", edge: "edge-alert" },
-  high: { tag: "tag-mark", marker: "", edge: "" },
-  low: { tag: "", marker: "", edge: "edge-quiet" },
+  urgent: { edge: "edge-alert" },
+  high: { edge: "" },
+  low: { edge: "edge-quiet" },
 };
 
+// how far along the task is (1 to 4 of the four steps), and the color of the steps
 const STATUS = {
-  pending: { dot: "", tag: "", card: "", title: "" },
-  in_progress: { dot: "dot-info pulse", tag: "tag-info", card: "", title: "" },
-  submitted: { dot: "dot-warn pulse", tag: "tag-warn", card: "", title: "" },
-  approved: { dot: "dot-clear", tag: "tag-clear", card: "", title: "" },
-  rejected: { dot: "dot-alert", tag: "tag-alert", card: "", title: "text-alert" },
-  canceled: {
-    dot: "",
-    tag: "",
-    card: "opacity-60 hover:opacity-100",
-    title: "muted line-through",
-  },
+  pending: { dot: "", steps: 1, tone: "", card: "", title: "" },
+  in_progress: { dot: "dot-info pulse", steps: 2, tone: "steps-info", card: "", title: "" },
+  submitted: { dot: "dot-warn pulse", steps: 3, tone: "steps-warn", card: "", title: "" },
+  approved: { dot: "dot-clear", steps: 4, tone: "steps-clear", card: "", title: "" },
+  rejected: { dot: "dot-alert", steps: 4, tone: "steps-alert", card: "", title: "text-alert" },
+  canceled: { dot: "", steps: 0, tone: "", card: "task-canceled", title: "muted" },
 };
 
 export default function Task_view_card({ task, edit_path }) {
@@ -27,50 +24,56 @@ export default function Task_view_card({ task, edit_path }) {
   const status = STATUS[task.status] ?? STATUS.pending;
 
   return (
-    <article
-      className={`card card-hover card-edge ${priority.edge} ${status.card} w-full flex flex-col sm:flex-row sm:items-center gap-4`}
-    >
-      {/* left: the task */}
-      <div className="flex-1 min-w-0 flex flex-col gap-1">
-        <div className="flex items-center gap-2 min-w-0">
+    <article className={`card card-edge ${priority.edge} ${status.card} task`}>
+      {/* top: title and the two tags */}
+      <div className="task-top">
+        <div className="task-title">
           <span className={`dot ${status.dot}`}></span>
           <h3 className={`truncate ${status.title}`}>{task.title}</h3>
         </div>
+        <div className="task-tags">
+          <Priority_tag priority={task.priority} />
+          <Status_tag status={task.status} />
+        </div>
+      </div>
 
-        <p className="muted text-sm line-clamp-2">{task.description}</p>
+      <p className="task-desc">{task.description}</p>
 
-        <div className="flex flex-wrap gap-x-6 text-sm pt-2">
+      {/* bottom: who, how far along, and the action */}
+      <div className="task-foot">
+        <div className="task-meta">
           <span className="truncate">
-            <span className="muted">Worker </span>
-            <span className={task.assigned_to ? "" : "muted"}>
+            <span className="k">Worker</span>
+            <span className={task.assigned_to ? "" : "faint"}>
               {task.assigned_to?.name ?? "not assigned yet"}
             </span>
           </span>
           <span className="truncate">
-            <span className="muted">Manager </span>
+            <span className="k">Manager</span>
             <span>{task.manager?.name}</span>
           </span>
         </div>
-      </div>
 
-      {/* right: state + action */}
-      <div className="flex sm:flex-col sm:items-end items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-2">
-          <span className={`tag capitalize ${priority.tag}`}>
-            {priority.marker && <span className="mr-1.5">{priority.marker}</span>}
-            {task.priority}
-          </span>
-          <span className={`tag capitalize ${status.tag}`}>
-            {task.status.replaceAll("_", " ")}
-          </span>
+        <div className="task-end">
+          <div
+            className={`steps ${status.tone}`}
+            role="img"
+            aria-label={`step ${status.steps} of 4`}
+          >
+            {[1, 2, 3, 4].map(function (n) {
+              return (
+                <span key={n} className={`step ${n <= status.steps ? "step-on" : ""}`}></span>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            className="btn btn-sm"
+            onClick={() => navigate(edit_path)}
+          >
+            Edit <span className="mark">[&gt;]</span>
+          </button>
         </div>
-        <button
-          type="button"
-          className="btn btn-sm"
-          onClick={() => navigate(edit_path)}
-        >
-          Edit
-        </button>
       </div>
     </article>
   );

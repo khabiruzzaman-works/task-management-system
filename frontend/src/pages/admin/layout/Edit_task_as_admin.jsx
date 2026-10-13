@@ -5,6 +5,8 @@ import { useEmployee } from "../../../context/Employee.context.jsx";
 import { edit_task_as_admin_controller } from "../controller/edit_task_as_admin.controller.js";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/Loading_screen.jsx";
+import Form_head from "../../../components/Form_head.jsx";
+import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
 
 export default function Edit_task_as_admin() {
   const { tasks, refresh_tasks, task_loading } = useTaskCenter();
@@ -24,9 +26,10 @@ export default function Edit_task_as_admin() {
       <main className="page">
         <div className="container container-narrow">
           <div className="empty empty-error">
+            <p className="empty-mark">[!]</p>
             <p className="empty-title">Couldn't find this task.</p>
             <p className="muted">It may have been removed.</p>
-            <div className="row justify-center" style={{ marginTop: "var(--space-4)" }}>
+            <div className="empty-actions">
               <button className="btn btn-sm" onClick={() => navigate("/admin")}>
                 Back to all tasks
               </button>
@@ -88,112 +91,132 @@ export default function Edit_task_as_admin() {
   return (
     <main className="page">
       <div className="container container-narrow">
-        <header className="page-header">
-          <h1>Edit task</h1>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={function () {
-              navigate("/admin");
-            }}
-          >
-            back
-          </button>
-        </header>
+        <Form_head
+          eyebrow="Admin / Tasks"
+          title="Edit task"
+          description="Change the details, move it to another manager or close it out."
+          on_back={function () {
+            navigate("/admin");
+          }}
+        />
 
-        <form onSubmit={submit_handler} className="card stack">
-          <div>
-            <label className="label label-caps" htmlFor="title">title</label>
-            <input
-              id="title"
-              className="input"
-              type="text"
-              name="title"
-              disabled={!can_edit}
-              placeholder="Task title"
-              value={form.title ?? the_task.title}
-              onChange={input_handler}
-              required
-            />
+        <form onSubmit={submit_handler} className="card form-card">
+          <div className="task-summary">
+            <div className="row">
+              <Priority_tag priority={the_task.priority} />
+              <Status_tag status={the_task.status} />
+            </div>
+            {is_out_of_option && (
+              <p className="muted text-sm">
+                This task is finished, so nothing on it can be changed anymore.
+              </p>
+            )}
+            {!is_out_of_option && !can_edit && (
+              <p className="muted text-sm">
+                The details are locked. Only the status can be changed now.
+              </p>
+            )}
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="description">description</label>
-            <textarea
-              id="description"
-              className="textarea"
-              rows={4}
-              name="description"
-              disabled={!can_edit}
-              placeholder="What needs to be done"
-              value={form.description ?? the_task.description}
-              onChange={input_handler}
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="form-body">
             <div>
-              <label className="label label-caps" htmlFor="priority">priority</label>
-              <select
-                id="priority"
-                className="select"
-                name="priority"
+              <label className="label label-caps" htmlFor="title">title</label>
+              <input
+                id="title"
+                className="input"
+                type="text"
+                name="title"
                 disabled={!can_edit}
-                value={form.priority ?? the_task.priority}
+                placeholder="Task title"
+                value={form.title ?? the_task.title}
                 onChange={input_handler}
-              >
-                <option value="high">high</option>
-                <option value="low">low</option>
-                <option value="urgent">urgent</option>
-              </select>
+                required
+              />
             </div>
 
             <div>
-              <label className="label label-caps" htmlFor="status">status</label>
-              <select
-                id="status"
-                className="select"
-                name="status"
-                disabled={is_out_of_option}
-                value={form.status ?? the_task.status}
+              <label className="label label-caps" htmlFor="description">description</label>
+              <textarea
+                id="description"
+                className="textarea"
+                rows={4}
+                name="description"
+                disabled={!can_edit}
+                placeholder="What needs to be done"
+                value={form.description ?? the_task.description}
                 onChange={input_handler}
+                required
+              />
+            </div>
+
+            <div className="form-split">
+              <div>
+                <label className="label label-caps" htmlFor="priority">priority</label>
+                <select
+                  id="priority"
+                  className="select"
+                  name="priority"
+                  disabled={!can_edit}
+                  value={form.priority ?? the_task.priority}
+                  onChange={input_handler}
+                >
+                  <option value="high">high</option>
+                  <option value="low">low</option>
+                  <option value="urgent">urgent</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="label label-caps" htmlFor="status">status</label>
+                <select
+                  id="status"
+                  className="select"
+                  name="status"
+                  disabled={is_out_of_option}
+                  value={form.status ?? the_task.status}
+                  onChange={input_handler}
+                >
+                  <option value={the_task.status}>{the_task.status} (currently)</option>
+                  {is_allowed_status.map(function (s, index) {
+                    return (
+                      <option key={index} value={s}>
+                        {s}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="manager_email">manager</label>
+              <select
+                id="manager_email"
+                className="select"
+                name="manager_email"
+                disabled={!can_change_manager}
+                value={form.manager_email ?? the_task?.manager?.email}
+                onChange={input_handler}
+                required
               >
-                <option value={the_task.status}>{the_task.status} (currently)</option>
-                {is_allowed_status.map(function (s, index) {
+                <option value="">select a manager</option>
+                {managers.map(function (manager) {
                   return (
-                    <option key={index} value={s}>
-                      {s}
+                    <option key={manager.email} value={manager.email}>
+                      {manager.name}
                     </option>
                   );
                 })}
               </select>
+              {can_change_manager && (
+                <p className="hint">
+                  Picking a different manager sends the task back to pending.
+                </p>
+              )}
             </div>
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="manager_email">manager</label>
-            <select
-              id="manager_email"
-              className="select"
-              name="manager_email"
-              disabled={!can_change_manager}
-              value={form.manager_email ?? the_task?.manager?.email}
-              onChange={input_handler}
-              required
-            >
-              <option value="">select a manager</option>
-              {managers.map(function (manager) {
-                return (
-                  <option key={manager.email} value={manager.email}>
-                    {manager.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="row justify-end">
+          <div className="form-actions">
             <button
               type="button"
               className="btn btn-md btn-ghost"

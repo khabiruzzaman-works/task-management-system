@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/Auth.context";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/Loading_screen";
+import Form_head from "../../../components/Form_head";
 
 export default function Pass_change() {
   const [current_password, set_current_password] = useState("");
@@ -61,63 +62,67 @@ export default function Pass_change() {
   return (
     <main className="page">
       <div className="container container-narrow">
-        <header className="page-header">
-          <h1>Change password</h1>
-          <button type="button" className="btn btn-sm btn-ghost" onClick={go_back}>
-            back
-          </button>
-        </header>
+        <Form_head
+          eyebrow="Account"
+          title="Change password"
+          description="Use between 8 and 72 characters. You will go back to your dashboard when it is done."
+          on_back={go_back}
+        />
 
-        <form onSubmit={password_changer} className="card stack">
-          <div>
-            <label className="label label-caps" htmlFor="current_password">old password</label>
-            <input
-              id="current_password"
-              className="input"
-              type="password"
-              name="current_password"
-              placeholder="••••••••"
-              value={current_password}
-              onChange={function (e) {
-                set_current_password(e.target.value);
-              }}
-              required
-            />
+        <form onSubmit={password_changer} className="card form-card">
+          <div className="form-body">
+            <div>
+              <label className="label label-caps" htmlFor="current_password">old password</label>
+              <input
+                id="current_password"
+                className="input"
+                type="password"
+                name="current_password"
+                placeholder="••••••••"
+                value={current_password}
+                onChange={function (e) {
+                  set_current_password(e.target.value);
+                }}
+                required
+              />
+            </div>
+
+            <div className="form-split">
+              <div>
+                <label className="label label-caps" htmlFor="new_password">new password</label>
+                <input
+                  id="new_password"
+                  className="input"
+                  type="password"
+                  name="new_password"
+                  placeholder="8 to 72 characters"
+                  value={new_password}
+                  onChange={function (e) {
+                    set_new_password(e.target.value);
+                  }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="label label-caps" htmlFor="new_password_again">retype new password</label>
+                <input
+                  id="new_password_again"
+                  className="input"
+                  type="password"
+                  name="new_password_again"
+                  placeholder="••••••••"
+                  value={new_password_again}
+                  onChange={function (e) {
+                    set_new_password_again(e.target.value);
+                  }}
+                  required
+                />
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="label label-caps" htmlFor="new_password">new password</label>
-            <input
-              id="new_password"
-              className="input"
-              type="password"
-              name="new_password"
-              placeholder="8 to 72 characters"
-              value={new_password}
-              onChange={function (e) {
-                set_new_password(e.target.value);
-              }}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="label label-caps" htmlFor="new_password_again">retype new password</label>
-            <input
-              id="new_password_again"
-              className="input"
-              type="password"
-              name="new_password_again"
-              placeholder="••••••••"
-              value={new_password_again}
-              onChange={function (e) {
-                set_new_password_again(e.target.value);
-              }}
-              required
-            />
-          </div>
-
-          <div className="row justify-end">
+          <div className="form-actions">
             <button type="button" className="btn btn-md btn-ghost" onClick={go_back}>
               Cancel
             </button>
