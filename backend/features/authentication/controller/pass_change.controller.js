@@ -1,4 +1,5 @@
 import { App_error, App_response } from "../../../utils/app_outcome_handler.js";
+import { cookie_options } from "../../../utils/cookie_handler.js";
 import pass_change_service from "../service/pass_change.service.js";
 const max_length = 72;
 const min_length = 8;
@@ -36,5 +37,6 @@ export async function pass_change_controller(req, res) {
     current_password,
   });
 
+  res.clearCookie("refreshToken", cookie_options);
   return new App_response("password is changed", 200).send_response(res);
 }
