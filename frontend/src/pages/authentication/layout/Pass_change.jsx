@@ -56,8 +56,8 @@ export default function Pass_change() {
       return notify(result.message, "error");
     }
 
-    notify(result.message, "success");
     navigate("/login", { replace: true });
+    notify(result.message, "success");
   }
 
   return (
