@@ -1,26 +1,29 @@
-const TONE = {
+const dot = {
+  info: "bg-info",
+  warn: "bg-warn",
+  clear: "bg-clear",
+  alert: "bg-alert",
+};
+const stats = {
+  info: "text-info",
+  warn: "text-warn",
   clear: "text-clear",
   alert: "text-alert",
-  warn: "text-warn",
-  info: "text-info",
 };
 
-const DOT = {
-  clear: "dot-clear",
-  alert: "dot-alert",
-  warn: "dot-warn",
-  info: "dot-info",
-};
-
-export default function Stat({ label, value, caption, tone }) {
+export default function Stat({ label, counter, caption, style = "" }) {
   return (
-    <div className="stat">
-      <span className="label label-caps">
-        <span className={`dot ${DOT[tone] ?? ""}`}></span>
+    <div className="flex flex-col border rounded-lg px-5 py-3 ">
+      <span
+        className={`${stats[style] || "text"} text-md flex items-center gap-1`}
+      >
+        <span
+          className={`${dot[style] || "bg-mark"} h-1.5 w-1.5 shrink-0  rounded-full `}
+        ></span>
         {label}
       </span>
-      <span className={`stat-value ${TONE[tone] ?? ""}`}>{value}</span>
-      <span className="faint text-xs">{caption}</span>
+      <span className={`${stats[style] || "text"} text-2xl`}>{counter}</span>
+      <span className={`text-muted text-xs`}>{caption}</span>
     </div>
   );
 }

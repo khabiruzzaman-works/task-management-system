@@ -3,19 +3,22 @@ import { useEmployee } from "../../../context/Employee.context";
 import { useNavigate } from "react-router-dom";
 import demotion_controller from "../controller/demotion.controller";
 import { useToast } from "../../../context/Notify.context";
-import Loading_screen from "../../../components/Loading_screen";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head";
 
 export default function Demotion() {
   const { employee, employee_loading, refresh_employee } = useEmployee();
   const [demoting_email, set_demoting_email] = useState(null);
+  const [submitting, set_submitting] = useState(false);
   const navigate = useNavigate();
   const { notify } = useToast();
 
   async function demote_handler(email) {
     set_demoting_email(email);
+    set_submitting(true);
     const result = await demotion_controller(email);
     set_demoting_email(null);
+    set_submitting(false);
 
     if (!result.success) {
       return notify(result.message, "error");
@@ -77,7 +80,9 @@ export default function Demotion() {
                       demote_handler(manager.email);
                     }}
                   >
-                    {demoting_email === manager.email ? "Demoting..." : "Demote"}
+                    {demoting_email === manager.email
+                      ? "Demoting..."
+                      : "Demote"}
                   </button>
                 </div>
               </div>

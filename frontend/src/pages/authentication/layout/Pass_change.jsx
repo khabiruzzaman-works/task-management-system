@@ -3,7 +3,7 @@ import pass_change_controller from "../controller/pass_change.controller";
 import { useAuth } from "../../../context/Auth.context";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
-import Loading_screen from "../../../components/Loading_screen";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head";
 
 export default function Pass_change() {
@@ -56,7 +56,7 @@ export default function Pass_change() {
     }
 
     notify(result.message, "success");
-    go_back();
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -72,7 +72,9 @@ export default function Pass_change() {
         <form onSubmit={password_changer} className="card form-card">
           <div className="form-body">
             <div>
-              <label className="label label-caps" htmlFor="current_password">old password</label>
+              <label className="label label-caps" htmlFor="current_password">
+                old password
+              </label>
               <input
                 id="current_password"
                 className="input"
@@ -89,7 +91,9 @@ export default function Pass_change() {
 
             <div className="form-split">
               <div>
-                <label className="label label-caps" htmlFor="new_password">new password</label>
+                <label className="label label-caps" htmlFor="new_password">
+                  new password
+                </label>
                 <input
                   id="new_password"
                   className="input"
@@ -105,7 +109,12 @@ export default function Pass_change() {
               </div>
 
               <div>
-                <label className="label label-caps" htmlFor="new_password_again">retype new password</label>
+                <label
+                  className="label label-caps"
+                  htmlFor="new_password_again"
+                >
+                  retype new password
+                </label>
                 <input
                   id="new_password_again"
                   className="input"
@@ -123,10 +132,18 @@ export default function Pass_change() {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn btn-md btn-ghost" onClick={go_back}>
+            <button
+              type="button"
+              className="btn btn-md btn-ghost"
+              onClick={go_back}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn btn-md btn-primary" disabled={submitting}>
+            <button
+              type="submit"
+              className="btn btn-md btn-primary"
+              disabled={submitting}
+            >
               {submitting ? "Changing..." : "Change password"}
             </button>
           </div>

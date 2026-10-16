@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { login_controller } from "../controller/login.controller.js";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
 export default function Login() {
   const navigate = useNavigate();

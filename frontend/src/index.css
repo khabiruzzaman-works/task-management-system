@@ -1,19 +1,84 @@
 @import "tailwindcss";
-@import "./ash/ash.css";
+@import "./ash/tokens.css";
+@import "./ash/components.css" layer(components);
 
-/*
-  Ash owns the look (colors, type, spacing, components).
-  Tailwind stays only for layout helpers (flex, grid, gap, mt-*).
-  Do not put margin utilities on h1/h2/p/hr: Ash's base.css resets those.
-*/
-
-/* let Tailwind utilities like text-clear read the Ash status tokens */
+/* Give your colors short Tailwind names.
+   Example: text-muted, bg-raised, border-line */
 @theme inline {
+  --color-page: var(--bg);
+  --color-sunken: var(--bg-sunken);
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-overlay: var(--overlay);
+
+  --color-primary: var(--text);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
+
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-mark: var(--mark);
+  --color-on-mark: var(--on-mark);
+
   --color-info: var(--info);
   --color-warn: var(--warn);
   --color-clear: var(--clear);
   --color-alert: var(--alert);
 }
 
-/* project extra: quiet left edge for low-priority task cards */
-.edge-quiet { border-left-color: var(--border-strong); }
+/* Global defaults. Inside @layer base, so Tailwind classes always win over them. */
+@layer base {
+  html {
+    background: var(--bg-sunken);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: var(--leading);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background var(--transition),
+      color var(--transition);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--mark);
+    color: var(--on-mark);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--overlay-top) transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

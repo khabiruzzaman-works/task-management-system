@@ -5,7 +5,7 @@ import { useWorker } from "../../../context/Worker.context.jsx";
 
 import { edit_task_as_manager_controller } from "../controller/edit_task_as_manager.controller.js";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head.jsx";
 import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
 

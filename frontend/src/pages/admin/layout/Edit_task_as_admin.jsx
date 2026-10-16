@@ -4,7 +4,7 @@ import { useTaskCenter } from "../../../context/Task.context.jsx";
 import { useEmployee } from "../../../context/Employee.context.jsx";
 import { edit_task_as_admin_controller } from "../controller/edit_task_as_admin.controller.js";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head.jsx";
 import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
 
@@ -15,6 +15,7 @@ export default function Edit_task_as_admin() {
   const navigate = useNavigate();
   const { notify } = useToast();
   const [adds, set_adds] = useState({});
+  const [submitting, set_submitting] = useState(false);
   if (task_loading || employee_loading) {
     return <Loading_screen />;
   }
@@ -54,10 +55,12 @@ export default function Edit_task_as_admin() {
   const form = { ...elements, ...adds };
   async function submit_handler(e) {
     e.preventDefault();
+    set_submitting(true);
     const result = await edit_task_as_admin_controller({
       ...adds,
       task_id: the_task._id,
     });
+    set_submitting(false);
 
     if (!result.success) {
       return notify(result.message, "error");
@@ -120,7 +123,9 @@ export default function Edit_task_as_admin() {
 
           <div className="form-body">
             <div>
-              <label className="label label-caps" htmlFor="title">title</label>
+              <label className="label label-caps" htmlFor="title">
+                title
+              </label>
               <input
                 id="title"
                 className="input"
@@ -135,7 +140,9 @@ export default function Edit_task_as_admin() {
             </div>
 
             <div>
-              <label className="label label-caps" htmlFor="description">description</label>
+              <label className="label label-caps" htmlFor="description">
+                description
+              </label>
               <textarea
                 id="description"
                 className="textarea"
@@ -151,7 +158,9 @@ export default function Edit_task_as_admin() {
 
             <div className="form-split">
               <div>
-                <label className="label label-caps" htmlFor="priority">priority</label>
+                <label className="label label-caps" htmlFor="priority">
+                  priority
+                </label>
                 <select
                   id="priority"
                   className="select"
@@ -167,7 +176,9 @@ export default function Edit_task_as_admin() {
               </div>
 
               <div>
-                <label className="label label-caps" htmlFor="status">status</label>
+                <label className="label label-caps" htmlFor="status">
+                  status
+                </label>
                 <select
                   id="status"
                   className="select"
@@ -176,7 +187,9 @@ export default function Edit_task_as_admin() {
                   value={form.status ?? the_task.status}
                   onChange={input_handler}
                 >
-                  <option value={the_task.status}>{the_task.status} (currently)</option>
+                  <option value={the_task.status}>
+                    {the_task.status} (currently)
+                  </option>
                   {is_allowed_status.map(function (s, index) {
                     return (
                       <option key={index} value={s}>
@@ -189,7 +202,9 @@ export default function Edit_task_as_admin() {
             </div>
 
             <div>
-              <label className="label label-caps" htmlFor="manager_email">manager</label>
+              <label className="label label-caps" htmlFor="manager_email">
+                manager
+              </label>
               <select
                 id="manager_email"
                 className="select"
@@ -227,7 +242,7 @@ export default function Edit_task_as_admin() {
               Cancel
             </button>
             <button type="submit" className="btn btn-md btn-primary">
-              Save changes
+              {submitting ? "Saving changes" : "Save changes"}
             </button>
           </div>
         </form>

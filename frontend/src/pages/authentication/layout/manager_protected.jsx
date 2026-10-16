@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import { Worker_Provider } from "../../../context/Worker.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
 export default function Manager_protected_route() {
   const { user, user_loading } = useAuth();

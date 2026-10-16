@@ -28,6 +28,7 @@ export default async function pass_change_service({
     user_id,
     {
       password: hashed_new_password,
+      refresh_token:null,
     },
     {
       returnDocument: "after",

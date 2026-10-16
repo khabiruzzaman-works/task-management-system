@@ -1,4 +1,4 @@
-import Admin from "./pages/admin/layout/Admin.jsx"
+import Admin from "./pages/admin/layout/Admin.jsx";
 import Worker from "./pages/worker/layout/Worker.jsx";
 import Login from "./pages/authentication/layout/Login.jsx";
 import { Auth_Provider } from "./context/Auth.context.jsx";
@@ -18,6 +18,8 @@ import Edit_task_as_worker from "./pages/worker/layout/Edit_task_as_worker.jsx";
 import Edit_task_as_manager from "./pages/manager/layout/Edit_as_manager.jsx";
 import Edit_task_as_admin from "./pages/admin/layout/Edit_task_as_admin.jsx";
 import { Toast_Provider } from "./context/Notify.context.jsx";
+import Not_found from "./components/pages/Not_found.jsx";
+import Home from "./pages/home/layout/Home.jsx";
 
 export {
   Admin,
@@ -40,4 +42,6 @@ export {
   Edit_task_as_manager,
   Edit_task_as_admin,
   Toast_Provider,
+  Not_found,
+  Home,
 };

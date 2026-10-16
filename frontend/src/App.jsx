@@ -21,6 +21,8 @@ import {
   Edit_task_as_manager,
   Edit_task_as_admin,
   Toast_Provider,
+  Not_found,
+  Home
 } from "./index.js";
 
 export default function App() {
@@ -31,7 +33,7 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route element={<No_user_protected_route />}>
-                <Route path={"/"} element={<Login />}></Route>
+                <Route path={"/"} element={<Home />}></Route>
                 <Route path={"/login"} element={<Login />}></Route>
               </Route>
 
@@ -77,6 +79,7 @@ export default function App() {
                   ></Route>
                 </Route>
               </Route>
+              <Route path={"*"} element={<Not_found />}></Route>
             </Routes>
           </BrowserRouter>
         </Auth_Provider>

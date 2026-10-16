@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEmployee } from "../../../context/Employee.context.jsx";
 import { useTaskCenter } from "../../../context/Task.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head.jsx";
 
 export default function Task_creation() {
@@ -15,6 +15,7 @@ export default function Task_creation() {
     status: "pending",
     manager_email: "",
   });
+  const [submitting, set_submitting] = useState(false);
   const navigate = useNavigate();
   const { notify } = useToast();
   const { employee, employee_loading } = useEmployee();
@@ -29,7 +30,9 @@ export default function Task_creation() {
 
   async function submit_handler(e) {
     e.preventDefault();
+    set_submitting(true);
     const result = await task_creation_controller(task_form);
+    set_submitting(false);
     if (!result.success) {
       return notify(result.message, "error");
     }
@@ -59,7 +62,9 @@ export default function Task_creation() {
         <form onSubmit={submit_handler} className="card form-card">
           <div className="form-body">
             <div>
-              <label className="label label-caps" htmlFor="title">title</label>
+              <label className="label label-caps" htmlFor="title">
+                title
+              </label>
               <input
                 id="title"
                 className="input"
@@ -73,7 +78,9 @@ export default function Task_creation() {
             </div>
 
             <div>
-              <label className="label label-caps" htmlFor="description">description</label>
+              <label className="label label-caps" htmlFor="description">
+                description
+              </label>
               <textarea
                 id="description"
                 className="textarea"
@@ -88,7 +95,9 @@ export default function Task_creation() {
 
             <div className="form-split">
               <div>
-                <label className="label label-caps" htmlFor="priority">priority</label>
+                <label className="label label-caps" htmlFor="priority">
+                  priority
+                </label>
                 <select
                   id="priority"
                   className="select"
@@ -103,7 +112,9 @@ export default function Task_creation() {
               </div>
 
               <div>
-                <label className="label label-caps" htmlFor="status">status</label>
+                <label className="label label-caps" htmlFor="status">
+                  status
+                </label>
                 <select
                   id="status"
                   className="select"
@@ -118,7 +129,9 @@ export default function Task_creation() {
             </div>
 
             <div>
-              <label className="label label-caps" htmlFor="manager_email">manager</label>
+              <label className="label label-caps" htmlFor="manager_email">
+                manager
+              </label>
               <select
                 id="manager_email"
                 className="select"
@@ -136,7 +149,9 @@ export default function Task_creation() {
                   );
                 })}
               </select>
-              <p className="hint">The manager will give this task to one of their workers.</p>
+              <p className="hint">
+                The manager will give this task to one of their workers.
+              </p>
             </div>
           </div>
 
@@ -151,7 +166,7 @@ export default function Task_creation() {
               Cancel
             </button>
             <button type="submit" className="btn btn-md btn-primary">
-              Create task
+              {submitting ? "Creating Task" : "Create task"}
             </button>
           </div>
         </form>

@@ -6,8 +6,7 @@ import { useTaskCenter } from "../../../context/Task.context.jsx";
 import Task_view_card from "../../../components/Task_view_card.jsx";
 import Stat from "../../../components/Stat.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Loading_screen from "../../../components/Loading_screen.jsx";
-import Topbar from "../../../components/Topbar.jsx";
+import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
 export default function Manager() {
   const navigate = useNavigate();
@@ -42,12 +41,7 @@ export default function Manager() {
 
   return (
     <>
-      <Topbar
-        role_label="Manager"
-        user_name={user?.name}
-        on_change_password={() => navigate("/change-password")}
-        on_logout={logout_handler}
-      />
+
 
       <main className="page page-dash">
         <div className="container">
