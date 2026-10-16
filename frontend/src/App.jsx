@@ -22,7 +22,11 @@ import {
   Edit_task_as_admin,
   Toast_Provider,
   Not_found,
-  Home
+  Home,
+  Dashboard,
+  Tasks,
+  Employees_admin,
+  Employees_manager,
 } from "./index.js";
 
 export default function App() {
@@ -39,14 +43,18 @@ export default function App() {
 
               <Route element={<Auth_protected_route />}>
                 <Route element={<Manager_protected_route />}>
-                  <Route path={"/manager"} element={<Manager />}></Route>
-                  <Route
-                    path={"/manager/task/edit/:task_id"}
-                    element={<Edit_task_as_manager />}
-                  ></Route>
+                  <Route path={"/manager"} element={<Manager />}>
+                    <Route path="/manager/dashboard" element={<Dashboard />} />
+                    <Route path="/manager/task" element={<Tasks />} />
+                    <Route path="/manager/employees" element={<Employees_manager />} />
+                  </Route>
+                    <Route path={"/manager/task/edit/:task_id"} element={<Edit_task_as_manager />} />
                 </Route>
                 <Route element={<Worker_protected_route />}>
-                  <Route path={"/worker"} element={<Worker />}></Route>
+                  <Route path={"/worker"} element={<Worker />}>
+                    <Route path="/worker/dashboard" element={<Dashboard />} />
+                    <Route path="/worker/task" element={<Tasks />} />
+                  </Route>
                   <Route
                     path={"/worker/task/edit/:task_id"}
                     element={<Edit_task_as_worker />}
@@ -58,7 +66,14 @@ export default function App() {
                 ></Route>
 
                 <Route element={<Admin_protected_route />}>
-                  <Route path={"/admin"} element={<Admin />}></Route>
+                  <Route path={"/admin"} element={<Admin />}>
+                    <Route path="/admin/dashboard" element={<Dashboard />} />
+                    <Route path="/admin/task" element={<Tasks />} />
+                    <Route
+                      path="/admin/employees"
+                      element={<Employees_admin />}
+                    />
+                  </Route>
                   <Route
                     path={"/register-worker"}
                     element={<Register_worker />}

@@ -20,6 +20,10 @@ import Edit_task_as_admin from "./pages/admin/layout/Edit_task_as_admin.jsx";
 import { Toast_Provider } from "./context/Notify.context.jsx";
 import Not_found from "./components/pages/Not_found.jsx";
 import Home from "./pages/home/layout/Home.jsx";
+import Dashboard from "./components/pages/Dashboard.jsx";
+import Tasks from "./components/pages/Tasks.jsx";
+import Employees_admin from "./pages/admin/components/Employees_admin.jsx";
+import Employees_manager from "./pages/manager/components/Employees_manager.jsx";
 
 export {
   Admin,
@@ -44,4 +48,8 @@ export {
   Toast_Provider,
   Not_found,
   Home,
+  Dashboard,
+  Tasks,
+  Employees_admin,
+  Employees_manager,
 };

@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Buttons from "./buttons/buttons";
+import { useAuth } from "../context/Auth.context";
+import Loading_screen from "./pages/Loading_screen";
 
 const role_label = {
   admin: "Administrator",
@@ -36,8 +38,12 @@ function Side_link({ to, end, children }) {
   );
 }
 
-export default function Side_bar({ logger, logout_handler }) {
-  const initial = (logger?.name || "?").trim().charAt(0);
+export default function Side_bar({ logout_handler }) {
+  const { user, user_loading } = useAuth();
+  if (user_loading) {
+    return <Loading_screen />;
+  }
+  const initial = (user?.name || "?").trim().charAt(0);
 
   return (
     <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col justify-between border-r border-line bg-sunken">
@@ -53,14 +59,14 @@ export default function Side_bar({ logger, logout_handler }) {
           <p className="px-3 pb-1 text-xs uppercase tracking-widest text-faint">
             Workspace
           </p>
-          <Side_link to={`/${logger?.role}`} end>
+          <Side_link to={`/${user?.role}/dashboard`} end>
             Dashboard
           </Side_link>
-          <Side_link to={`/${logger?.role}/task`} end>
+          <Side_link to={`/${user?.role}/task`} end>
             Tasks
           </Side_link>
-          {logger?.role !== "worker" && (
-            <Side_link to="/employees">Employees</Side_link>
+          {user?.role !== "worker" && (
+            <Side_link to={`${user?.role}/employees`}>Employees</Side_link>
           )}
         </nav>
       </div>
@@ -74,9 +80,9 @@ export default function Side_bar({ logger, logout_handler }) {
             {initial}
           </span>
           <div className="flex min-w-0 flex-col leading-tight">
-            <span className="truncate text-sm text-primary">{logger?.name}</span>
+            <span className="truncate text-sm text-primary">{user?.name}</span>
             <span className="truncate text-xs text-faint">
-              {role_label[logger?.role] ?? logger?.role}
+              {role_label[user?.role] ?? user?.role}
             </span>
           </div>
         </div>
