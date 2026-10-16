@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 import Form_head from "../../../components/Form_head";
+import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Pass_change() {
   const [current_password, set_current_password] = useState("");
@@ -23,11 +24,11 @@ export default function Pass_change() {
 
   function go_back() {
     if (user?.role === "admin") {
-      navigate("/admin");
+      navigate("/admin/dashboard");
     } else if (user?.role === "manager") {
-      navigate("/manager");
+      navigate("/manager/dashboard");
     } else {
-      navigate("/worker");
+      navigate("/worker/dashboard");
     }
   }
 
@@ -60,14 +61,9 @@ export default function Pass_change() {
   }
 
   return (
-    <main className="page">
+
       <div className="container container-narrow">
-        <Form_head
-          eyebrow="Account"
-          title="Change password"
-          description="Use between 8 and 72 characters. You will go back to your dashboard when it is done."
-          on_back={go_back}
-        />
+      <Buttons variant="ghost" text={"Back to panel"} onClick={go_back} />
 
         <form onSubmit={password_changer} className="card form-card">
           <div className="form-body">
@@ -149,6 +145,6 @@ export default function Pass_change() {
           </div>
         </form>
       </div>
-    </main>
+
   );
 }

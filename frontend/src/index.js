@@ -5,8 +5,6 @@ import { Auth_Provider } from "./context/Auth.context.jsx";
 import Admin_protected_route from "./pages/authentication/layout/Admin_protected.jsx";
 import Register_worker from "./pages/authentication/layout/Register_worker.jsx";
 import Task_creation from "./pages/admin/layout/Task_creation.jsx";
-import Promotion from "./pages/admin/layout/Promotion.jsx";
-import Demotion from "./pages/admin/layout/Demotion.jsx";
 import Assign_worker from "./pages/admin/layout/Assign_worker.jsx";
 import Auth_protected_route from "./pages/authentication/layout/auth_protected.jsx";
 import Pass_change from "./pages/authentication/layout/Pass_change.jsx";
@@ -33,8 +31,6 @@ export {
   Admin_protected_route,
   Register_worker,
   Task_creation,
-  Promotion,
-  Demotion,
   Assign_worker,
   Auth_protected_route,
   Pass_change,

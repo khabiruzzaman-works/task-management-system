@@ -5,8 +5,8 @@ import { useEmployee } from "../../../context/Employee.context.jsx";
 import { edit_task_as_admin_controller } from "../controller/edit_task_as_admin.controller.js";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
-import Form_head from "../../../components/Form_head.jsx";
 import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
+import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Edit_task_as_admin() {
   const { tasks, refresh_tasks, task_loading } = useTaskCenter();
@@ -31,7 +31,7 @@ export default function Edit_task_as_admin() {
             <p className="empty-title">Couldn't find this task.</p>
             <p className="muted">It may have been removed.</p>
             <div className="empty-actions">
-              <button className="btn btn-sm" onClick={() => navigate("/admin")}>
+              <button className="btn btn-sm" onClick={() => navigate("/admin/tasks")}>
                 Back to all tasks
               </button>
             </div>
@@ -67,7 +67,7 @@ export default function Edit_task_as_admin() {
     }
     refresh_tasks();
     notify(result.message, "success");
-    navigate("/admin");
+    navigate("/admin/tasks");
   }
 
   function input_handler(e) {
@@ -92,14 +92,13 @@ export default function Edit_task_as_admin() {
     the_task.status === "pending" || the_task.status === "in_progress";
 
   return (
-    <main className="page">
-      <div className="container container-narrow">
-        <Form_head
-          eyebrow="Admin / Tasks"
-          title="Edit task"
-          description="Change the details, move it to another manager or close it out."
-          on_back={function () {
-            navigate("/admin");
+
+      <div className="w-full flex flex-col">
+        <Buttons
+          variant="ghost"
+          text={"Back to panel"}
+          onClick={function () {
+            navigate("/admin/tasks");
           }}
         />
 
@@ -236,7 +235,7 @@ export default function Edit_task_as_admin() {
               type="button"
               className="btn btn-md btn-ghost"
               onClick={function () {
-                navigate("/admin");
+                navigate("/admin/tasks");
               }}
             >
               Cancel
@@ -247,6 +246,5 @@ export default function Edit_task_as_admin() {
           </div>
         </form>
       </div>
-    </main>
   );
 }

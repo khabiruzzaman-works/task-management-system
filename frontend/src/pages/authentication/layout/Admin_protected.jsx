@@ -7,19 +7,15 @@ export default function Admin_protected_route() {
   const { user, user_loading } = useAuth();
 
   if (user_loading) {
-    return <Loading_screen/>;
+    return <Loading_screen />;
   }
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role === "manager") {
-    return <Navigate to="/manager" replace />;
-  }
-
-  if (user.role === "worker") {
-    return <Navigate to="/worker" replace />;
+  if (user?.role === "worker" || user?.role === "manager") {
+    return <Navigate to={`/${user?.role}`} replace />;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Buttons from "./buttons/buttons";
 import { useAuth } from "../context/Auth.context";
 import Loading_screen from "./pages/Loading_screen";
@@ -18,8 +18,8 @@ function Side_link({ to, end, children }) {
       to={to}
       end={end}
       className={(function ({ isActive }) {
-        return ` ${isActive ? link_active : link_idle}`;
-      })`flex items-center gap-2 rounded px-3 py-2 text-sm border border-transparent transition-colors duration-200`}
+        return ` ${isActive ? link_active : link_idle} flex items-center gap-2 rounded px-3 py-2 text-sm border border-transparent transition-colors duration-200`
+      })}
     >
       {function ({ isActive }) {
         return (
@@ -40,6 +40,7 @@ function Side_link({ to, end, children }) {
 
 export default function Side_bar({ logout_handler }) {
   const { user, user_loading } = useAuth();
+  const navigate = useNavigate();
   if (user_loading) {
     return <Loading_screen />;
   }
@@ -62,7 +63,7 @@ export default function Side_bar({ logout_handler }) {
           <Side_link to={`/${user?.role}/dashboard`} end>
             Dashboard
           </Side_link>
-          <Side_link to={`/${user?.role}/task`} end>
+          <Side_link to={`/${user?.role}/tasks`} end>
             Tasks
           </Side_link>
           {user?.role !== "worker" && (
@@ -92,6 +93,15 @@ export default function Side_bar({ logout_handler }) {
           style="w-full"
           text="Logout"
           onClick={logout_handler}
+        />
+        <Buttons
+          variant="ghost"
+          size="sm"
+          style="w-full"
+          text="Password Change"
+          onClick={function () {
+            navigate(`${user?.role}/profile/change-password`)
+          }}
         />
       </div>
     </aside>

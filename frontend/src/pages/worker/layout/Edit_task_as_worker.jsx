@@ -30,7 +30,7 @@ export default function Edit_task_as_worker() {
             <p className="empty-title">Couldn't find this task.</p>
             <p className="muted">It may have been removed or reassigned.</p>
             <div className="empty-actions">
-              <button className="btn btn-sm" onClick={() => navigate("/worker")}>
+              <button className="btn btn-sm" onClick={() => navigate("/worker/dashboard")}>
                 Back to my tasks
               </button>
             </div>
@@ -68,14 +68,13 @@ export default function Edit_task_as_worker() {
   const is_allowed_status = is_available_status[the_task.status];
   const is_out_of_option = is_allowed_status.length === 0;
   return (
-    <main className="page">
-      <div className="container container-narrow">
-        <Form_head
-          eyebrow="Worker / Tasks"
-          title="Update task"
-          description="When the work is done, set the status to submitted so it can be reviewed."
-          on_back={function () {
-            navigate("/worker");
+
+      <div className="w-full flex flex-col">
+        <Buttons
+          variant="ghost"
+          text="Back to panel"
+          onClick={function () {
+            navigate("/worker/tasks");
           }}
         />
 
@@ -147,6 +146,6 @@ export default function Edit_task_as_worker() {
           </div>
         </form>
       </div>
-    </main>
+
   );
 }

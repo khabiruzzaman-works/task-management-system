@@ -8,8 +8,6 @@ import {
   Admin_protected_route,
   Register_worker,
   Task_creation,
-  Promotion,
-  Demotion,
   Assign_worker,
   Auth_protected_route,
   Pass_change,
@@ -42,59 +40,42 @@ export default function App() {
               </Route>
 
               <Route element={<Auth_protected_route />}>
+
                 <Route element={<Manager_protected_route />}>
                   <Route path={"/manager"} element={<Manager />}>
                     <Route path="/manager/dashboard" element={<Dashboard />} />
-                    <Route path="/manager/task" element={<Tasks />} />
+                    <Route path={"/manager/profile/change-password"} element={<Pass_change />} />
+                    <Route path="/manager/tasks" element={<Tasks />} />
                     <Route path="/manager/employees" element={<Employees_manager />} />
+                    <Route path={"/manager/tasks/edit/:task_id"} element={<Edit_task_as_manager />} />
                   </Route>
-                    <Route path={"/manager/task/edit/:task_id"} element={<Edit_task_as_manager />} />
                 </Route>
+
                 <Route element={<Worker_protected_route />}>
                   <Route path={"/worker"} element={<Worker />}>
                     <Route path="/worker/dashboard" element={<Dashboard />} />
-                    <Route path="/worker/task" element={<Tasks />} />
+                    <Route path={"/worker/profile/change-password"} element={<Pass_change />} />
+                    <Route path="/worker/tasks" element={<Tasks />} />
+                    <Route path="/worker/tasks/edit/:task_id" element={<Edit_task_as_worker />} />
                   </Route>
-                  <Route
-                    path={"/worker/task/edit/:task_id"}
-                    element={<Edit_task_as_worker />}
-                  ></Route>
                 </Route>
-                <Route
-                  path={"/change-password"}
-                  element={<Pass_change />}
-                ></Route>
 
                 <Route element={<Admin_protected_route />}>
                   <Route path={"/admin"} element={<Admin />}>
                     <Route path="/admin/dashboard" element={<Dashboard />} />
-                    <Route path="/admin/task" element={<Tasks />} />
-                    <Route
-                      path="/admin/employees"
-                      element={<Employees_admin />}
-                    />
+                <Route path={"/admin/profile/change-password"} element={<Pass_change />} />
+                    <Route path="/admin/tasks" element={<Tasks />} />
+                    <Route path="/admin/tasks/create" element={<Task_creation />} />
+                    <Route path="/admin/tasks/edit/:task_id" element={<Edit_task_as_admin />} />
+                    <Route path="/admin/employees" element={<Employees_admin />} />
+                    <Route path="/admin/employees/register" element={<Register_worker />} />
+                    <Route path="/admin/employees/assign-worker" element={<Assign_worker />} />
                   </Route>
-                  <Route
-                    path={"/register-worker"}
-                    element={<Register_worker />}
-                  ></Route>
-                  <Route
-                    path={"/task-creation"}
-                    element={<Task_creation />}
-                  ></Route>
-                  <Route
-                    path={"/admin/task/edit/:task_id"}
-                    element={<Edit_task_as_admin />}
-                  ></Route>
-                  <Route path={"/promote"} element={<Promotion />}></Route>
-                  <Route path={"/demote"} element={<Demotion />}></Route>
-                  <Route
-                    path={"/assign-worker"}
-                    element={<Assign_worker />}
-                  ></Route>
                 </Route>
+
               </Route>
               <Route path={"*"} element={<Not_found />}></Route>
+
             </Routes>
           </BrowserRouter>
         </Auth_Provider>

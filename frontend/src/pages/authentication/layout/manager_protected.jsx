@@ -15,7 +15,7 @@ export default function Manager_protected_route() {
   }
 
   if (user?.role === "admin" || user?.role === "worker") {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`/${user?.role}`} replace />;
   }
 
   return (

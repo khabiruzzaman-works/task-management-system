@@ -4,6 +4,7 @@ import { register_worker_controller } from "../controller/register.controller.js
 import { useEmployee } from "../../../context/Employee.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Form_head from "../../../components/Form_head.jsx";
+import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Register_worker() {
   const navigate = useNavigate();
@@ -25,20 +26,12 @@ export default function Register_worker() {
     }
     refresh_employee();
     notify(result.message, "success");
-    navigate("/admin");
+    navigate("/admin/employees");
   }
   return (
-    <main className="page">
-      <div className="container container-narrow">
-        <Form_head
-          eyebrow="Admin / People"
-          title="Register worker"
-          description="Create an account for a new worker. They can change the password after their first login."
-          on_back={function () {
-            navigate("/admin");
-          }}
-        />
 
+      <div className="w-full flex flex-col">
+        <Buttons variant="ghost" size="sm" text={"Back to panel"} onClick={function(){navigate("/admin/employees",{replace:true})}} />
         <form onSubmit={form_handler} className="card form-card">
           <div className="form-body">
             <div>
@@ -90,7 +83,7 @@ export default function Register_worker() {
               type="button"
               className="btn btn-md btn-ghost"
               onClick={function () {
-                navigate("/admin");
+                navigate("/admin/employees");
               }}
             >
               Cancel
@@ -101,6 +94,6 @@ export default function Register_worker() {
           </div>
         </form>
       </div>
-    </main>
+
   );
 }
