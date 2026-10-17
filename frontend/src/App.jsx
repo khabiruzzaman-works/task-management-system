@@ -43,6 +43,7 @@ export default function App() {
 
                 <Route element={<Manager_protected_route />}>
                   <Route path={"/manager"} element={<Manager />}>
+                    <Route index element={<Navigate to="dashboard" replace />} />
                     <Route path="/manager/dashboard" element={<Dashboard />} />
                     <Route path={"/manager/profile/change-password"} element={<Pass_change />} />
                     <Route path="/manager/tasks" element={<Tasks />} />
@@ -53,6 +54,7 @@ export default function App() {
 
                 <Route element={<Worker_protected_route />}>
                   <Route path={"/worker"} element={<Worker />}>
+                    <Route index element={<Navigate to="dashboard" replace />} />
                     <Route path="/worker/dashboard" element={<Dashboard />} />
                     <Route path={"/worker/profile/change-password"} element={<Pass_change />} />
                     <Route path="/worker/tasks" element={<Tasks />} />
@@ -62,8 +64,9 @@ export default function App() {
 
                 <Route element={<Admin_protected_route />}>
                   <Route path={"/admin"} element={<Admin />}>
+                    <Route index element={<Navigate to="dashboard" replace />} />
                     <Route path="/admin/dashboard" element={<Dashboard />} />
-                <Route path={"/admin/profile/change-password"} element={<Pass_change />} />
+                    <Route path={"/admin/profile/change-password"} element={<Pass_change />} />
                     <Route path="/admin/tasks" element={<Tasks />} />
                     <Route path="/admin/tasks/create" element={<Task_creation />} />
                     <Route path="/admin/tasks/edit/:task_id" element={<Edit_task_as_admin />} />

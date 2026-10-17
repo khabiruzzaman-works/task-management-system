@@ -93,7 +93,7 @@ export default function Employees_admin() {
                 }
                 loading="Demoting"
                 onClick={function () {
-                  promote_handler(em?.email);
+                  demote_handler(em?.email);
                 }}
               />
             </div>

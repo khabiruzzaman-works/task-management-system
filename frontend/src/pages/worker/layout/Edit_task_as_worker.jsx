@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTaskCenter } from "../../../context/Task.context.jsx";
 import { edit_task_as_worker_controller } from "../controller/edit_task_as_worker.controller.js";
-import { useAuth } from "../../../context/Auth.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
-import Form_head from "../../../components/Form_head.jsx";
 import { Priority_tag, Status_tag } from "../../../components/Task_badges.jsx";
+import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Edit_task_as_worker() {
   let params = useParams();
@@ -23,8 +22,8 @@ export default function Edit_task_as_worker() {
 
   if (!the_task) {
     return (
-      <main className="page">
-        <div className="container container-narrow">
+
+        <div className="w-full flex flex-col">
           <div className="empty empty-error">
             <p className="empty-mark">[!]</p>
             <p className="empty-title">Couldn't find this task.</p>
@@ -36,7 +35,7 @@ export default function Edit_task_as_worker() {
             </div>
           </div>
         </div>
-      </main>
+
     );
   }
   async function submit_handler(e) {
