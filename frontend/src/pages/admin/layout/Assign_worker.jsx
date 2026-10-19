@@ -38,7 +38,7 @@ export default function Assign_worker() {
     return u.role === "manager";
   });
   const workers = employee.filter(function (u) {
-    return u.role === "worker" && u.manager === null;
+    return u.role === "worker" && !u.manager;
   });
 
   return (

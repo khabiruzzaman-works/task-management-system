@@ -15,7 +15,7 @@ export default async function assign_worker_service(
   if (!the_manager || !the_worker) {
     throw new App_error(
       "worker or manager is not found",
-      403,
+      404,
       "USER_NOT_FOUND",
     );
   }

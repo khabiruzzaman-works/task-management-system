@@ -11,11 +11,9 @@ export default function Employees_manager() {
     <>
       {worker.map(function (wo) {
         return (
-          <>
-            <div key={wo?._id} className="w-full flex mb-3">
-              <span className="text-primary text-sm">{wo?.name}</span>
-            </div>
-          </>
+          <div key={wo?._id} className="w-full flex mb-3">
+            <span className="text-primary text-sm">{wo?.name}</span>
+          </div>
         );
       })}
     </>
