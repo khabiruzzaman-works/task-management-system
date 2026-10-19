@@ -9,7 +9,8 @@ async function server() {
       console.log("hi, server is good to go");
     });
   } catch (error) {
-    console.log("server failed to connect with db");
+    console.log(`server failed to connect with db ,error : ${error}`);
+    process.exit(1);
   }
 }
 

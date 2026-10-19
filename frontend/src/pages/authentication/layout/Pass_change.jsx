@@ -12,7 +12,7 @@ export default function Pass_change() {
   const [new_password, set_new_password] = useState("");
   const [new_password_again, set_new_password_again] = useState("");
   const [submitting, set_submitting] = useState(false);
-  const { user, user_loading } = useAuth();
+  const {set_user, user, user_loading } = useAuth();
   const navigate = useNavigate();
   const { notify } = useToast();
   if (user_loading) {
@@ -55,7 +55,7 @@ export default function Pass_change() {
     if (!result.success) {
       return notify(result.message, "error");
     }
-
+    set_user(null);
     navigate("/login", { replace: true });
     notify(result.message, "success");
   }

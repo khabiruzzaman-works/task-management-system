@@ -1,11 +1,6 @@
 import { App_error, App_response } from "../../../utils/app_outcome_handler.js";
 import task_change_as_manager_service from "../service/task_change_as_manager.service.js";
 
-const manager_allowed_status = [
-  "in_progress",
-  undefined,
-];
-
 export default async function task_change_as_manager_controller(req, res) {
   const { worker_email, task_id, status } = req.body;
 
@@ -19,12 +14,12 @@ export default async function task_change_as_manager_controller(req, res) {
       "some of the task assigning info is missing from fillng space",
     );
   }
-  if (!manager_allowed_status.includes(status)) {
+
+  if (status !== undefined) {
     throw new App_error(
-      "you are not permitted to do this",
+      "managers can't change status directly",
       403,
       "FORBIDDEN",
-      "manager can only edit task status into in_progress ",
     );
   }
 

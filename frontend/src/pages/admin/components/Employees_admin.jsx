@@ -9,12 +9,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Loading_screen from "../../../components/pages/Loading_screen";
 
 export default function Employees_admin() {
-  const { user, user_Loading } = useAuth();
+  const { user, user_loading } = useAuth();
   const { employee, employee_loading, refresh_employee } = useEmployee();
   const { notify } = useToast();
   const navigate = useNavigate();
   const [submitting_email, set_submitting_email] = useState(null);
-  if (user_Loading || employee_loading) {
+  if (user_loading || employee_loading) {
     return <Loading_screen />;
   }
 
