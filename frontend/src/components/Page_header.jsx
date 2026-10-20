@@ -18,7 +18,7 @@ export default function Page_header() {
         <span className="text-xs uppercase tracking-widest text-faint">
           Welcome back
         </span>
-        <span className="text-lg font-bold text-fg">{user?.name}</span>
+        <span className="text-lg font-bold text-primary">{user?.name}</span>
       </div>
 
       <div className="flex items-center gap-3">
