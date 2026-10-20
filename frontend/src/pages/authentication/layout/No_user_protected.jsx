@@ -1,23 +1,22 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
 export default function No_user_protected_route() {
   const { user, user_loading } = useAuth();
-  const navigate = useNavigate();
 
   if (user_loading) {
     return <Loading_screen />;
   }
 
   if (user?.role === "admin") {
-    return navigate("/admin", { replace: true });
+    return <Navigate to={"/admin"} replace={true} />;
   }
   if (user?.role === "manager") {
-    return navigate("/manager", { replace: true });
+    return <Navigate to={"/manager"} replace={true} />;
   }
   if (user?.role === "worker") {
-    return navigate("/worker", { replace: true });
+    return <Navigate to={"/worker"} replace={true} />;
   }
 
   return <Outlet />;

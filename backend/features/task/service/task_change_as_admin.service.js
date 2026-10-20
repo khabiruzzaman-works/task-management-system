@@ -3,12 +3,12 @@ import User from "../../user/model/user.model.js";
 import Task from "../model/task.model.js";
 
 const editablity = {
-  in_progress: {status:["canceled"],                          manager:false, detailes:false},
-  submitted:   {status:["rejected", "approved", "canceled"],manager:false, detailes:false},
-  pending:     {status:["canceled"],                          manager:true,  detailes:true},
-  canceled:    {status:[],                                  manager:false, detailes:false},
-  approved:    {status:[],                                  manager:false, detailes:false},
-  rejected:    {status:[],                                  manager:false, detailes:false},
+  in_progress: {status:["canceled"],                          manager:false, details:false},
+  submitted:   {status:["rejected", "approved", "canceled"],manager:false, details:false},
+  pending:     {status:["canceled"],                          manager:true,  details:true},
+  canceled:    {status:[],                                  manager:false, details:false},
+  approved:    {status:[],                                  manager:false, details:false},
+  rejected:    {status:[],                                  manager:false, details:false},
 };
 function valid(value) {
   if (typeof value !== "string") { return undefined };
@@ -41,7 +41,7 @@ export default async function task_change_as_admin_service(
 
 
   if (valid_title || valid_description || valid_priority) {
-    if (!editable.detailes) {
+    if (!editable.details) {
       throw new App_error("details can't be edited now", 403, "FORBIDDEN");
     }
     if (valid_title) {

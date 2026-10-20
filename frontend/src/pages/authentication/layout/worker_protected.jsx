@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
 
@@ -11,11 +11,11 @@ export default function Worker_protected_route() {
   }
 
   if (!user) {
-    return navigate("/login", { replace: true });
+    return <Navigate to={"/login"} replace={true} />
   }
 
   if (user?.role === "admin" || user?.role === "manager") {
-    return navigate(`/${user?.role}`, { replace: true });
+    return <Navigate to={`/${user?.role}`} replace={true} />
   }
 
   return <Outlet />;

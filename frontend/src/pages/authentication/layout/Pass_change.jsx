@@ -4,7 +4,6 @@ import { useAuth } from "../../../context/Auth.context";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
-import Form_head from "../../../components/Form_head";
 import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Pass_change() {
