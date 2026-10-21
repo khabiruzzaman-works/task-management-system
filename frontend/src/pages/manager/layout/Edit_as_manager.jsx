@@ -131,6 +131,7 @@ export default function Edit_task_as_manager() {
               value={form?.worker_email ?? the_task?.assigned_to?.email}
               className="select"
             >
+              <option value={""}> Select a worker</option>
               {worker.map(function (user) {
                 return (
                   <option key={user?.email} value={user?.email}>
