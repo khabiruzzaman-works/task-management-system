@@ -13,7 +13,7 @@ export default async function task_change_as_manager_service(
     throw new App_error("task not found", 404, "TASK_NOT_FOUND");
   }
 
-  if (status !== "pending" && status !== "in_progess") {
+  if (task.status !== "pending" && task.status !== "in_progress") {
     throw new App_error(
       "you are not permitted to do this",
       403,
@@ -23,7 +23,7 @@ export default async function task_change_as_manager_service(
   }
 
   if (worker_email === null || worker_email === "") {
-    task.assigned_to === null;
+    task.assigned_to = null;
     task.status = "pending";
   } else {
     const worker = await User.findOne({

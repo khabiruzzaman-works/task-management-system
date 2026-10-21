@@ -62,7 +62,7 @@ export default async function task_change_as_admin_service(
     }
 
     const manager_user = await User.findOne({
-      email: manager_email,
+      email: valid_manager_email,
       role: "manager",
     })
       .select("_id")
