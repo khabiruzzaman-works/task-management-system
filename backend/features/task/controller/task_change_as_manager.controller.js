@@ -16,7 +16,7 @@ export default async function task_change_as_manager_controller(req, res) {
   }
 
   if (
-    (worker_email === undefined && worker_email === null) ||
+    (worker_email === undefined || worker_email === null) ||
     worker_email === ""
   ) {
     throw new App_error("no action is performed", 401, "VALIDATION_ERROR");
