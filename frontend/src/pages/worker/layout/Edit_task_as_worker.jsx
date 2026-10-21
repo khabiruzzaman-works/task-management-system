@@ -103,7 +103,7 @@ export default function Edit_task_as_worker() {
               id="status"
               className="select"
               name="status"
-              disabled={is_selection_valid}
+              disabled={!is_selection_valid}
               value={form.status ?? the_task.status}
               onChange={input_handler}
             >

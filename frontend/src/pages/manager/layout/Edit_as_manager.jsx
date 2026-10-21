@@ -63,6 +63,9 @@ export default function Edit_task_as_manager() {
     });
   }
 
+  const can_change_worker =
+    the_task.status === "pending" || the_task.status === "in_progress";
+
   return (
     <div className="w-full flex flex-col">
       <Buttons
@@ -128,9 +131,6 @@ export default function Edit_task_as_manager() {
               value={form?.worker_email ?? the_task?.assigned_to?.email}
               className="select"
             >
-              <option value={the_task?.assigned_to?.email}>
-                {the_task?.assigned_to?.name ?? "not assigned yet"} (currently)
-              </option>
               {worker.map(function (user) {
                 return (
                   <option key={user?.email} value={user?.email}>
