@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/Auth.context.jsx";
 import { Tasks_Provider } from "../../../context/Task.context.jsx";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
@@ -25,7 +25,7 @@ export default function Auth_protected_route() {
   }
 
   if (!user) {
-    return navigate("/login", { replace: true });
+    return <Navigate to={"/login"} replace={true} />;
   }
 
   return (

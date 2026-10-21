@@ -31,7 +31,10 @@ export default function Edit_task_as_admin() {
             <p className="empty-title">Couldn't find this task.</p>
             <p className="muted">It may have been removed.</p>
             <div className="empty-actions">
-              <button className="btn btn-sm" onClick={() => navigate("/admin/tasks")}>
+              <button
+                className="btn btn-sm"
+                onClick={() => navigate("/admin/tasks")}
+              >
                 Back to all tasks
               </button>
             </div>
@@ -86,165 +89,162 @@ export default function Edit_task_as_admin() {
   };
   const is_allowed_status = is_available_status[the_task.status];
   const is_out_of_option = is_allowed_status.length === 0;
-  const can_change_manager =
-    the_task.status === "pending" || the_task.status === "in_progress";
-  const can_edit =
-    the_task.status === "pending" || the_task.status === "in_progress";
+  const can_change_manager = the_task.status === "pending";
+  const can_edit = the_task.status === "pending";
 
   return (
+    <div className="w-full flex flex-col">
+      <Buttons
+        variant="ghost"
+        text={"Back to panel"}
+        onClick={function () {
+          navigate("/admin/tasks");
+        }}
+      />
 
-      <div className="w-full flex flex-col">
-        <Buttons
-          variant="ghost"
-          text={"Back to panel"}
-          onClick={function () {
-            navigate("/admin/tasks");
-          }}
-        />
+      <form onSubmit={submit_handler} className="card form-card">
+        <div className="task-summary">
+          <div className="row">
+            <Priority_tag priority={the_task.priority} />
+            <Status_tag status={the_task.status} />
+          </div>
+          {is_out_of_option && (
+            <p className="muted text-sm">
+              This task is finished, so nothing on it can be changed anymore.
+            </p>
+          )}
+          {!is_out_of_option && !can_edit && (
+            <p className="muted text-sm">
+              The details are locked. Only the status can be changed now.
+            </p>
+          )}
+        </div>
 
-        <form onSubmit={submit_handler} className="card form-card">
-          <div className="task-summary">
-            <div className="row">
-              <Priority_tag priority={the_task.priority} />
-              <Status_tag status={the_task.status} />
-            </div>
-            {is_out_of_option && (
-              <p className="muted text-sm">
-                This task is finished, so nothing on it can be changed anymore.
-              </p>
-            )}
-            {!is_out_of_option && !can_edit && (
-              <p className="muted text-sm">
-                The details are locked. Only the status can be changed now.
-              </p>
-            )}
+        <div className="form-body">
+          <div>
+            <label className="label label-caps" htmlFor="title">
+              title
+            </label>
+            <input
+              id="title"
+              className="input"
+              type="text"
+              name="title"
+              disabled={!can_edit}
+              placeholder="Task title"
+              value={form.title ?? the_task.title}
+              onChange={input_handler}
+              required
+            />
           </div>
 
-          <div className="form-body">
+          <div>
+            <label className="label label-caps" htmlFor="description">
+              description
+            </label>
+            <textarea
+              id="description"
+              className="textarea"
+              rows={4}
+              name="description"
+              disabled={!can_edit}
+              placeholder="What needs to be done"
+              value={form.description ?? the_task.description}
+              onChange={input_handler}
+              required
+            />
+          </div>
+
+          <div className="form-split">
             <div>
-              <label className="label label-caps" htmlFor="title">
-                title
-              </label>
-              <input
-                id="title"
-                className="input"
-                type="text"
-                name="title"
-                disabled={!can_edit}
-                placeholder="Task title"
-                value={form.title ?? the_task.title}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label label-caps" htmlFor="description">
-                description
-              </label>
-              <textarea
-                id="description"
-                className="textarea"
-                rows={4}
-                name="description"
-                disabled={!can_edit}
-                placeholder="What needs to be done"
-                value={form.description ?? the_task.description}
-                onChange={input_handler}
-                required
-              />
-            </div>
-
-            <div className="form-split">
-              <div>
-                <label className="label label-caps" htmlFor="priority">
-                  priority
-                </label>
-                <select
-                  id="priority"
-                  className="select"
-                  name="priority"
-                  disabled={!can_edit}
-                  value={form.priority ?? the_task.priority}
-                  onChange={input_handler}
-                >
-                  <option value="high">high</option>
-                  <option value="low">low</option>
-                  <option value="urgent">urgent</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="label label-caps" htmlFor="status">
-                  status
-                </label>
-                <select
-                  id="status"
-                  className="select"
-                  name="status"
-                  disabled={is_out_of_option}
-                  value={form.status ?? the_task.status}
-                  onChange={input_handler}
-                >
-                  <option value={the_task.status}>
-                    {the_task.status} (currently)
-                  </option>
-                  {is_allowed_status.map(function (s, index) {
-                    return (
-                      <option key={index} value={s}>
-                        {s}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="label label-caps" htmlFor="manager_email">
-                manager
+              <label className="label label-caps" htmlFor="priority">
+                priority
               </label>
               <select
-                id="manager_email"
+                id="priority"
                 className="select"
-                name="manager_email"
-                disabled={!can_change_manager}
-                value={form.manager_email ?? the_task?.manager?.email}
+                name="priority"
+                disabled={!can_edit}
+                value={form.priority ?? the_task.priority}
                 onChange={input_handler}
-                required
               >
-                <option value="">select a manager</option>
-                {managers.map(function (manager) {
+                <option value="high">high</option>
+                <option value="low">low</option>
+                <option value="urgent">urgent</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="label label-caps" htmlFor="status">
+                status
+              </label>
+              <select
+                id="status"
+                className="select"
+                name="status"
+                disabled={is_out_of_option}
+                value={form.status ?? the_task.status}
+                onChange={input_handler}
+              >
+                <option value={the_task.status}>
+                  {the_task.status} (currently)
+                </option>
+                {is_allowed_status.map(function (s, index) {
                   return (
-                    <option key={manager.email} value={manager.email}>
-                      {manager.name}
+                    <option key={index} value={s}>
+                      {s}
                     </option>
                   );
                 })}
               </select>
-              {can_change_manager && (
-                <p className="hint">
-                  Picking a different manager sends the task back to pending.
-                </p>
-              )}
             </div>
           </div>
 
-          <div className="form-actions">
-            <button
-              type="button"
-              className="btn btn-md btn-ghost"
-              onClick={function () {
-                navigate("/admin/tasks");
-              }}
+          <div>
+            <label className="label label-caps" htmlFor="manager_email">
+              manager
+            </label>
+            <select
+              id="manager_email"
+              className="select"
+              name="manager_email"
+              disabled={!can_change_manager}
+              value={form.manager_email ?? the_task?.manager?.email}
+              onChange={input_handler}
+              required
             >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-md btn-primary">
-              {submitting ? "Saving changes" : "Save changes"}
-            </button>
+              <option value="">select a manager</option>
+              {managers.map(function (manager) {
+                return (
+                  <option key={manager.email} value={manager.email}>
+                    {manager.name}
+                  </option>
+                );
+              })}
+            </select>
+            {can_change_manager && (
+              <p className="hint">
+                Picking a different manager sends the task back to pending.
+              </p>
+            )}
           </div>
-        </form>
-      </div>
+        </div>
+
+        <div className="form-actions">
+          <button
+            type="button"
+            className="btn btn-md btn-ghost"
+            onClick={function () {
+              navigate("/admin/tasks");
+            }}
+          >
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-md btn-primary">
+            {submitting ? "Saving changes" : "Save changes"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

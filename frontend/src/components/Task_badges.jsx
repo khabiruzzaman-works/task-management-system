@@ -1,5 +1,3 @@
-// Display only: the colored priority and status tags used on cards and edit pages.
-
 const PRIORITY_TAG = {
   urgent: "tag-alert",
   high: "tag-mark",
@@ -19,7 +17,7 @@ export function Priority_tag({ priority }) {
   return (
     <span className={`tag capitalize ${PRIORITY_TAG[priority] ?? ""}`}>
       {priority === "urgent" && <span className="mr-1.5">[!]</span>}
-      {priority}
+      {priority.trim() ?? ""}
     </span>
   );
 }
@@ -27,7 +25,7 @@ export function Priority_tag({ priority }) {
 export function Status_tag({ status }) {
   return (
     <span className={`tag capitalize ${STATUS_TAG[status] ?? ""}`}>
-      {status?.replaceAll("_", " ")}
+      {status.trim() ?? ""}
     </span>
   );
 }

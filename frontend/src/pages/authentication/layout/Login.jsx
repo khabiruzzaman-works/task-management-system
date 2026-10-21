@@ -55,19 +55,27 @@ export default function Login() {
           <ol className="auth-flow">
             <li>
               <span>[+]</span>
-              <span><strong>Admin</strong> creates a task and picks a manager.</span>
+              <span>
+                <strong>Admin</strong> creates a task and picks a manager.
+              </span>
             </li>
             <li>
               <span>[&gt;]</span>
-              <span><strong>Manager</strong> gives it to a worker on their team.</span>
+              <span>
+                <strong>Manager</strong> gives it to a worker on their team.
+              </span>
             </li>
             <li>
               <span>[&gt;]</span>
-              <span><strong>Worker</strong> does the work and submits it.</span>
+              <span>
+                <strong>Worker</strong> does the work and submits it.
+              </span>
             </li>
             <li>
               <span>[x]</span>
-              <span><strong>Admin</strong> reviews it and approves or rejects.</span>
+              <span>
+                <strong>Admin</strong> reviews it and approves or rejects.
+              </span>
             </li>
           </ol>
         </div>
@@ -87,7 +95,9 @@ export default function Login() {
           <form onSubmit={form_handler} className="card form-card">
             <div className="form-body">
               <div>
-                <label className="label label-caps" htmlFor="email">email</label>
+                <label className="label label-caps" htmlFor="email">
+                  email
+                </label>
                 <input
                   id="email"
                   className="input"
@@ -101,7 +111,9 @@ export default function Login() {
               </div>
 
               <div>
-                <label className="label label-caps" htmlFor="password">password</label>
+                <label className="label label-caps" htmlFor="password">
+                  password
+                </label>
                 <input
                   id="password"
                   className="input"

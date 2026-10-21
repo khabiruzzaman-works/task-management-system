@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { register_worker_controller } from "../controller/register.controller.js";
 import { useEmployee } from "../../../context/Employee.context.jsx";
 import { useToast } from "../../../context/Notify.context.jsx";
-import Form_head from "../../../components/Form_head.jsx";
 import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Register_worker() {

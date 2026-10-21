@@ -4,7 +4,6 @@ import { useAuth } from "../../../context/Auth.context";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/Notify.context";
 import Loading_screen from "../../../components/pages/Loading_screen.jsx";
-import Form_head from "../../../components/Form_head";
 import Buttons from "../../../components/buttons/buttons.jsx";
 
 export default function Pass_change() {
@@ -12,7 +11,7 @@ export default function Pass_change() {
   const [new_password, set_new_password] = useState("");
   const [new_password_again, set_new_password_again] = useState("");
   const [submitting, set_submitting] = useState(false);
-  const { user, user_loading } = useAuth();
+  const {set_user, user, user_loading } = useAuth();
   const navigate = useNavigate();
   const { notify } = useToast();
   if (user_loading) {
@@ -55,7 +54,7 @@ export default function Pass_change() {
     if (!result.success) {
       return notify(result.message, "error");
     }
-
+    set_user(null);
     navigate("/login", { replace: true });
     notify(result.message, "success");
   }

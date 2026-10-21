@@ -27,7 +27,7 @@ export async function pass_change_controller(req, res) {
   if (is_pass_inappropriate) {
     throw new App_error(
       `password has to be between 8 and 72 chars`,
-      403,
+      400,
       "VALIDATION_ERROR",
     );
   }

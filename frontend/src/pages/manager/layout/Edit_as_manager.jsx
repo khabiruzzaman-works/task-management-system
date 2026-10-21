@@ -63,16 +63,6 @@ export default function Edit_task_as_manager() {
     });
   }
 
-  const is_available_status = {
-    in_progress: [],
-    submitted: [],
-    pending: ["in_progress"],
-    canceled: [],
-    approved: [],
-    rejected: [],
-  };
-  const is_allowed_status = is_available_status[the_task.status];
-  const is_out_of_option = is_allowed_status.length === 0;
   const can_change_worker =
     the_task.status === "pending" || the_task.status === "in_progress";
 
@@ -123,21 +113,10 @@ export default function Edit_task_as_manager() {
               id="status"
               className="select"
               name="status"
-              disabled={is_out_of_option}
+              disabled={true}
               value={form.status ?? the_task.status}
               onChange={input_handler}
-            >
-              <option value={the_task.status}>
-                {the_task.status} (currently)
-              </option>
-              {is_allowed_status.map(function (s, index) {
-                return (
-                  <option key={index} value={s}>
-                    {s}
-                  </option>
-                );
-              })}
-            </select>
+            ></select>
           </div>
 
           <div>
@@ -152,9 +131,7 @@ export default function Edit_task_as_manager() {
               value={form?.worker_email ?? the_task?.assigned_to?.email}
               className="select"
             >
-              <option value={the_task?.assigned_to?.email}>
-                {the_task?.assigned_to?.name ?? "not assigned yet"} (currently)
-              </option>
+              <option value={""}> Select a worker</option>
               {worker.map(function (user) {
                 return (
                   <option key={user?.email} value={user?.email}>

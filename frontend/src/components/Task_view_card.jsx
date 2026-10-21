@@ -7,7 +7,7 @@ const PRIORITY = {
   low: { edge: "edge-quiet" },
 };
 
-// how far along the task is (1 to 4 of the four steps), and the color of the steps
+
 const STATUS = {
   pending: { dot: "", steps: 1, tone: "", card: "", title: "" },
   in_progress: { dot: "dot-info pulse", steps: 2, tone: "steps-info", card: "", title: "" },
@@ -25,7 +25,6 @@ export default function Task_view_card({ task, edit_path }) {
 
   return (
     <article className={`card card-edge ${priority.edge} ${status.card} task`}>
-      {/* top: title and the two tags */}
       <div className="task-top">
         <div className="task-title">
           <span className={`dot ${status.dot}`}></span>
@@ -39,7 +38,6 @@ export default function Task_view_card({ task, edit_path }) {
 
       <p className="task-desc">{task.description}</p>
 
-      {/* bottom: who, how far along, and the action */}
       <div className="task-foot">
         <div className="task-meta">
           <span className="truncate">
