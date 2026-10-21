@@ -67,7 +67,7 @@ export default function Side_bar({ logout_handler }) {
             Tasks
           </Side_link>
           {user?.role !== "worker" && (
-            <Side_link to={`${user?.role}/employees`}>Employees</Side_link>
+            <Side_link to={`/${user?.role}/employees`}>Employees</Side_link>
           )}
         </nav>
       </div>

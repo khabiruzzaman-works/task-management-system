@@ -15,20 +15,14 @@ export default async function task_change_as_manager_controller(req, res) {
     );
   }
 
-  if (status !== undefined) {
-    throw new App_error(
-      "managers can't change status directly",
-      403,
-      "FORBIDDEN",
-    );
+  if (
+    (worker_email === undefined && worker_email === null) ||
+    worker_email === ""
+  ) {
+    throw new App_error("no action is performed", 401, "VALIDATION_ERROR");
   }
 
-  await task_change_as_manager_service(
-    task_id,
-    manager_id,
-    worker_email,
-    status,
-  );
+  await task_change_as_manager_service(task_id, manager_id, worker_email);
   return new App_response("task is assign successfully", 200).send_response(
     res,
   );

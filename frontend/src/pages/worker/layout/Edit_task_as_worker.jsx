@@ -22,20 +22,21 @@ export default function Edit_task_as_worker() {
 
   if (!the_task) {
     return (
-
-        <div className="w-full flex flex-col">
-          <div className="empty empty-error">
-            <p className="empty-mark">[!]</p>
-            <p className="empty-title">Couldn't find this task.</p>
-            <p className="muted">It may have been removed or reassigned.</p>
-            <div className="empty-actions">
-              <button className="btn btn-sm" onClick={() => navigate("/worker/dashboard")}>
-                Back to my tasks
-              </button>
-            </div>
+      <div className="w-full flex flex-col">
+        <div className="empty empty-error">
+          <p className="empty-mark">[!]</p>
+          <p className="empty-title">Couldn't find this task.</p>
+          <p className="muted">It may have been removed or reassigned.</p>
+          <div className="empty-actions">
+            <button
+              className="btn btn-sm"
+              onClick={() => navigate("/worker/dashboard")}
+            >
+              Back to my tasks
+            </button>
           </div>
         </div>
-
+      </div>
     );
   }
   async function submit_handler(e) {
@@ -55,96 +56,77 @@ export default function Edit_task_as_worker() {
       return { ...prev, [e.target.name]: e.target.value };
     });
   }
+  const is_selection_valid = the_task.status === "in_progress";
 
-  const is_available_status = {
-    in_progress: ["submitted"],
-    submitted: [],
-    pending: [],
-    canceled: [],
-    approved: [],
-    rejected: [],
-  };
-  const is_allowed_status = is_available_status[the_task.status];
-  const is_out_of_option = is_allowed_status.length === 0;
   return (
+    <div className="w-full flex flex-col">
+      <Buttons
+        variant="ghost"
+        text="Back to panel"
+        onClick={function () {
+          navigate("/worker/tasks");
+        }}
+      />
 
-      <div className="w-full flex flex-col">
-        <Buttons
-          variant="ghost"
-          text="Back to panel"
-          onClick={function () {
-            navigate("/worker/tasks");
-          }}
-        />
-
-        <form onSubmit={submit_handler} className="card form-card">
-          <div className="task-summary">
-            <div className="row">
-              <Priority_tag priority={the_task?.priority} />
-              <Status_tag status={the_task?.status} />
+      <form onSubmit={submit_handler} className="card form-card">
+        <div className="task-summary">
+          <div className="row">
+            <Priority_tag priority={the_task?.priority} />
+            <Status_tag status={the_task?.status} />
+          </div>
+          <div>
+            <span className="label label-caps">title</span>
+            <h2>{the_task?.title}</h2>
+          </div>
+          <div>
+            <span className="label label-caps">description</span>
+            <p className="muted">{the_task?.description}</p>
+          </div>
+          <div className="facts">
+            <div>
+              <span className="label label-caps">worker</span>
+              <span>{the_task?.assigned_to?.name}</span>
             </div>
             <div>
-              <span className="label label-caps">title</span>
-              <h2>{the_task?.title}</h2>
-            </div>
-            <div>
-              <span className="label label-caps">description</span>
-              <p className="muted">{the_task?.description}</p>
-            </div>
-            <div className="facts">
-              <div>
-                <span className="label label-caps">worker</span>
-                <span>{the_task?.assigned_to?.name}</span>
-              </div>
-              <div>
-                <span className="label label-caps">manager</span>
-                <span>{the_task?.manager?.name}</span>
-              </div>
+              <span className="label label-caps">manager</span>
+              <span>{the_task?.manager?.name}</span>
             </div>
           </div>
+        </div>
 
-          <div className="form-body">
-            <div>
-              <label className="label label-caps" htmlFor="status">status</label>
-              <select
-                id="status"
-                className="select"
-                name="status"
-                disabled={is_out_of_option}
-                value={form.status ?? the_task.status}
-                onChange={input_handler}
-              >
-                <option value={the_task.status}>{the_task.status} (currently)</option>
-                {is_allowed_status.map(function (s, index) {
-                  return (
-                    <option key={index} value={s}>
-                      {s}
-                    </option>
-                  );
-                })}
-              </select>
-              {is_out_of_option && (
-                <p className="hint">There is nothing to change on this task right now.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button
-              type="button"
-              className="btn btn-md btn-ghost"
-              onClick={function () {
-                navigate("/worker");
-              }}
+        <div className="form-body">
+          <div>
+            <label className="label label-caps" htmlFor="status">
+              status
+            </label>
+            <select
+              id="status"
+              className="select"
+              name="status"
+              disabled={is_selection_valid}
+              value={form.status ?? the_task.status}
+              onChange={input_handler}
             >
-              Cancel
-            </button>
-            <button className="btn btn-md btn-primary" type="submit">
-              Save changes
-            </button>
+              <option value={"submitted"}>Submit</option>
+            </select>
           </div>
-        </form>
-      </div>
+        </div>
 
+        <div className="form-actions">
+          <button
+            type="button"
+            className="btn btn-md btn-ghost"
+            onClick={function () {
+              navigate("/worker");
+            }}
+          >
+            Cancel
+          </button>
+          <button className="btn btn-md btn-primary" type="submit">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
