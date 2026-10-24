@@ -54,7 +54,7 @@ export default function Register_worker() {
                 className="input"
                 type="email"
                 name="email"
-                placeholder="*****@kr.org"
+                placeholder="*****@khabiruzzaman.xyz"
                 value={form.email}
                 onChange={input_handler}
                 required

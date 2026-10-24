@@ -1,40 +1,39 @@
 # Task Management System
 
-A full-stack, role-based task workflow app built with the MERN stack. An **admin** creates tasks and assigns them to a **manager**, the manager hands them to a **worker**, the worker submits the result, and the admin approves or rejects it. Every rule is enforced on the server, not just hidden in the UI.
+A role-based task app I built to learn what a "real" full-stack project looks like. An admin creates a task and picks a manager, the manager hands it to a worker, the worker submits it, and the admin approves or rejects it.
 
-**Live demo:** TODO add link
-**Demo login:** TODO add a throwaway demo account (never a real one)
+The part I cared about most: every rule is enforced on the server. Hiding a button in the UI is not security, so the API checks who you are, what you own, and what state the task is in, no matter what the frontend sends.
 
-<!-- TODO: add 2-3 screenshots, e.g. docs/screenshots/admin-dashboard.png -->
-<!-- ![Admin dashboard](docs/screenshots/admin-dashboard.png) -->
+**Live demo:** https://task-management-system-ytjg.onrender.com
 
-## Highlights
+> The backend runs on Render's free tier and goes to sleep when idle, so the first login can take 30 to 60 seconds. After that it's fast.
 
-- **Server-enforced role-based access control.** Dedicated middleware (`adminify`, `managerify`, `workerify`) guards every route, and each service checks ownership too (an admin can only edit tasks they created, a manager only tasks they manage, a worker only tasks assigned to them).
-- **Task status state machine.** Allowed transitions are defined per role in the service layer. Invalid transitions are rejected with `403`, whatever the UI sends.
-- **Hardened session handling.** Short-lived access token kept in memory, refresh token in an `httpOnly` cookie, refresh tokens rotated on every refresh and stored **SHA-256 hashed** in the database. The frontend silently refreshes on expiry and de-duplicates concurrent refresh calls.
-- **Rate limiting** with `express-rate-limit`: per IP + email on login (failed attempts only), per user on register and password change, plus a global limit.
-- **Safe account lifecycle.** Changing a password invalidates the session. Promoting or demoting is blocked while the user has active tasks.
-- **Closed system.** No public sign-up. The admin creates accounts, and only emails on the configured organisation domain can log in.
+## Try it
 
-## Features
+There's no public sign-up (the admin creates accounts), so here are three demo accounts. The data is throwaway, so feel free to click around.
 
-- Three roles with separate dashboards: admin, manager, worker
-- **Admin:** create tasks, edit details while pending, cancel, approve or reject submitted work, register users, assign workers to managers, promote workers and demote managers
-- **Manager:** see tasks assigned to them and give each one to a worker on their team (can be changed while the task is pending or in progress)
-- **Worker:** see their own tasks and submit finished work for review
-- Per-role dashboards with task statistics, toast notifications, change-password flow
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | demo.admin@khabiruzzaman.xyz | 12345678 |
+| Manager | demo.manager@khabiruzzaman.xyz | 12345678 |
+| Worker | demo.worker@khabiruzzaman.xyz | 12345678 |
 
-## Tech stack
+Please don't change these passwords, since it logs out the next person who tries them. The login page shows a different example domain in the placeholder, but use the emails above.
 
-| Layer | Tools |
+A good way to see the whole flow: log in as the admin and create a task, then log in as the manager and assign it, then as the worker and submit it, then back as the admin to approve it.
+
+## Screenshots
+
+| | |
 | --- | --- |
-| Frontend | React 19, Vite, React Router 7, Tailwind CSS 4, custom CSS design system ("ASH") |
-| Backend | Node.js, Express 5, Mongoose 9 |
-| Database | MongoDB (Atlas) |
-| Auth and security | JWT (access + refresh), bcryptjs, cookie-parser, CORS, express-rate-limit |
+| ![Login](docs/screenshots/login.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+| Login | Admin dashboard |
+| ![Admin task list](docs/screenshots/admin-tasks.png) | ![Create task](docs/screenshots/create-task.png) |
+| Admin task list | Creating a task |
+| ![Manager dashboard](docs/screenshots/manager-dashboard.png) | ![Worker dashboard](docs/screenshots/worker-dashboard.png) |
+| Manager dashboard | Worker dashboard |
 
-## Task workflow
+## How it works
 
 ```mermaid
 stateDiagram-v2
@@ -49,100 +48,104 @@ stateDiagram-v2
     submitted --> canceled: Admin cancels
 ```
 
-- Task details (title, description, priority) and the manager can only be changed while the task is `pending`. Changing the manager clears the assigned worker.
-- `approved`, `rejected` and `canceled` are final.
-
-## Roles and permissions
+Approved, rejected and canceled are final. Title, description, priority and manager can only be changed while a task is still `pending`.
 
 | Action | Admin | Manager | Worker |
 | --- | :---: | :---: | :---: |
-| Register users | yes | - | - |
-| Promote / demote / assign workers to managers | yes | - | - |
-| Create tasks | yes | - | - |
-| Edit details, change manager, cancel, approve, reject | yes (own tasks) | - | - |
-| Assign a task to a worker | - | yes (own team) | - |
-| Submit a task | - | - | yes (own tasks) |
-| View tasks | tasks they created | tasks they manage | tasks assigned to them |
-| Change own password | yes | yes | yes |
+| Register users, promote, demote, build teams | yes | | |
+| Create tasks | yes | | |
+| Edit, cancel, approve or reject | yes (own tasks) | | |
+| Assign a task to a worker | | yes (own team) | |
+| Submit a task | | | yes (own tasks) |
+| See tasks | ones they created | ones they manage | ones assigned to them |
 
-## Getting started
+## What I focused on
 
-### Prerequisites
+- **Authorization on the server.** Role middleware (`adminify`, `managerify`, `workerify`) guards the routes, and the services check ownership again. An admin can only touch tasks they created, a manager only tasks they manage, a worker only tasks assigned to them.
+- **Status rules in one place.** The allowed transitions for each role live in the service layer. A request that tries an invalid move gets a 403, even if someone calls the API directly.
+- **Session handling.** The access token is short-lived and kept in memory. The refresh token sits in an httpOnly cookie, is rotated on every refresh, and is stored hashed (SHA-256) in the database. The frontend refreshes quietly when a token expires and makes sure parallel requests don't trigger several refreshes at once.
+- **Rate limiting** on login (failed attempts only, per IP and email), register, password change, and a global limit.
+- **A closed system.** Only emails on the configured organisation domain can log in, and only the admin can create accounts. Changing your password ends your session, and you can't promote or demote someone who still has active tasks.
 
-- Node.js 20.19+ or 22.12+
-- A MongoDB database ([MongoDB Atlas](https://www.mongodb.com/atlas) free tier works)
+## Tech stack
 
-### 1. Clone
+| | |
+| --- | --- |
+| Frontend | React 19, Vite, React Router 7, Tailwind CSS 4, plus a small custom CSS design system |
+| Backend | Node.js, Express 5, Mongoose 9 |
+| Database | MongoDB Atlas |
+| Auth and security | JWT (access and refresh), bcryptjs, cookie-parser, CORS, express-rate-limit |
+| Hosting | Render (frontend and backend), MongoDB Atlas |
+
+## Run it locally
+
+You need Node.js 20.19+ (or 22.12+) and a MongoDB database. The Atlas free tier is enough.
 
 ```bash
-git clone https://github.com/<your-username>/task-management-system.git
+git clone https://github.com/khabiruzzaman-dev/task-management-system.git
 cd task-management-system
 ```
 
-### 2. Backend
+**Backend**
 
 ```bash
 cd backend
 npm install
-cp .env.example .env        # then fill in real values (see "Environment variables")
-npm run seed:admin          # creates the first admin from ADMIN_* in .env
-npm start                   # API on http://localhost:3000
+cp .env.example .env     # fill in your own values
+npm run seed:admin       # creates the first admin from the ADMIN_* values
+npm start                # http://localhost:3000
 ```
 
-### 3. Frontend
+**Frontend** (in a second terminal)
 
 ```bash
 cd frontend
 npm install
 cp .env.example .env
-npm run dev                 # app on http://localhost:5173
+npm run dev              # http://localhost:5173
 ```
 
-Log in with the seeded admin, then register a manager and a worker from the admin dashboard. New users start as workers: promote one to manager, then assign workers to that manager.
+Log in as the seeded admin, register a manager and a worker, promote the manager, then put the worker on the manager's team.
 
-## Environment variables
+### Environment variables
 
-**Backend (`backend/.env`)**
+Backend (`backend/.env`):
 
-| Variable | Purpose |
+| Variable | What it's for |
 | --- | --- |
-| `PORT` | API port (example: 3000) |
+| `PORT` | API port, e.g. 3000 |
 | `MONGODB_URI` | MongoDB connection string |
-| `ACCESS_TOKEN_SECRET_KEY` / `ACCESS_TOKEN_EXPIRY` | Access token secret and lifetime (e.g. `15m`) |
-| `REFRESH_TOKEN_SECRET_KEY` / `REFRESH_TOKEN_EXPIRY` | Refresh token secret (different from the access secret) and lifetime (e.g. `15d`) |
+| `ACCESS_TOKEN_SECRET_KEY`, `ACCESS_TOKEN_EXPIRY` | Access token secret and lifetime (e.g. `15m`) |
+| `REFRESH_TOKEN_SECRET_KEY`, `REFRESH_TOKEN_EXPIRY` | A different secret for refresh tokens, and lifetime (e.g. `15d`) |
 | `ORG_DOMAIN` | Only emails on this domain can log in or be registered |
 | `CLIENT_URL` | Frontend origin allowed by CORS |
-| `NODE_ENV` | `development` or `production` (production enables secure cross-site cookies and proxy trust) |
-| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Used only by `npm run seed:admin` |
+| `NODE_ENV` | `development` or `production` (production turns on secure cross-site cookies and proxy trust) |
+| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Only used by `npm run seed:admin` |
 
-**Frontend (`frontend/.env`)**
+Frontend (`frontend/.env`): `VITE_API_URL`, the API base URL, e.g. `http://localhost:3000/api`.
 
-| Variable | Purpose |
-| --- | --- |
-| `VITE_API_URL` | Base URL of the API, e.g. `http://localhost:3000/api` |
+The real `.env` files are git-ignored. Only the `.env.example` templates are committed.
 
-Real `.env` files are git-ignored. Only the `.env.example` templates are committed.
+## API
 
-## API overview
+Everything lives under `/api`. All routes except login, token refresh and the health check need an `Authorization: Bearer <accessToken>` header.
 
-All routes are prefixed with `/api`. Everything except login, token refresh and the health check needs an `Authorization: Bearer <accessToken>` header.
-
-| Method | Route | Access | Description |
+| Method | Route | Who | What it does |
 | --- | --- | --- | --- |
 | GET | `/health` | public | Health check |
-| POST | `/authentication/login` | public | Log in, returns access token and sets refresh cookie |
+| POST | `/authentication/login` | public | Log in, returns an access token and sets the refresh cookie |
 | POST | `/authentication/refresh-tokens` | refresh cookie | Rotate tokens |
 | DELETE | `/authentication/logout` | any user | Invalidate the refresh token |
 | GET | `/authentication/get-me` | any user | Current user |
-| PATCH | `/authentication/change-pass` | any user | Change own password (ends the session) |
-| POST | `/authentication/register-user` | admin | Create a user (starts as worker) |
+| PATCH | `/authentication/change-pass` | any user | Change your password (ends the session) |
+| POST | `/authentication/register-user` | admin | Create a user (starts as a worker) |
 | PATCH | `/user/admin/promote` | admin | Worker to manager |
 | PATCH | `/user/admin/demote` | admin | Manager to worker |
 | PATCH | `/user/admin/assign-worker` | admin | Put a worker on a manager's team |
-| GET | `/user/admin/get-employee-list` | admin | Managers and workers registered by this admin |
+| GET | `/user/admin/get-employee-list` | admin | Managers and workers this admin registered |
 | GET | `/user/manager/get_worker-list` | manager | Workers on the manager's team |
 | POST | `/task/create-task` | admin | Create a task |
-| GET | `/task/get-tasks` | any user | Tasks visible to the caller's role |
+| GET | `/task/get-tasks` | any user | Tasks visible to your role |
 | PATCH | `/task/task-admin` | admin | Edit, change manager, approve, reject, cancel |
 | PATCH | `/task/task-manager` | manager | Assign a worker |
 | PATCH | `/task/task-worker` | worker | Submit work |
@@ -151,36 +154,38 @@ All routes are prefixed with `/api`. Everything except login, token refresh and 
 
 ```
 backend/
-  config/            env + database setup
-  features/
-    admin/ authentication/ manager/ task/ user/
-      route/ controller/ service/ model/   # route -> controller -> service -> model
-  middleware/        auth, role guards (adminify, managerify, workerify), rate limiters
-  utils/             token generation and hashing, cookie options, shared error/response classes
-  scripts/           seed_admin.js
+  config/          env and database setup
+  features/        admin, authentication, manager, task, user
+                   (each: route -> controller -> service -> model)
+  middleware/      auth, role guards, rate limiters
+  utils/           token helpers, cookie options, shared error and response classes
+  scripts/         seed_admin.js
 frontend/
   src/
-    ash/             design tokens and component styles
-    components/      shared UI (task card, stats, sidebar, buttons)
-    context/         auth, tasks, employees, workers, toasts
-    pages/           admin/ manager/ worker/ authentication/ home/ (layout, controller, service)
-    utils/           fetch wrapper with automatic token refresh
+    ash/           design tokens and component styles
+    components/    shared UI (task card, stats, sidebar, buttons)
+    context/       auth, tasks, employees, workers, toasts
+    pages/         admin, manager, worker, authentication, home
+    utils/         fetch wrapper with automatic token refresh
 ```
 
-## Known limitations and roadmap
+## What's missing
 
-- A worker cannot be unassigned from or moved between managers once assigned
-- No request body schema validation yet (planned: Zod)
-- No automated tests yet (planned: tests for the status-transition rules)
-- Email verification and "forgot password" are not implemented
-- Rejected tasks are final (no rework loop)
-- No pagination or search on task lists
-- Planned: comments and activity history on tasks, due dates, notifications
+I'd rather say it than hide it:
+
+- No automated tests yet. The status-transition rules are the first thing I'd cover.
+- No request body validation yet (I plan to add Zod).
+- A worker can't be moved to another manager once assigned.
+- No pagination or search on the lists.
+- No email verification or "forgot password".
+- Rejected tasks are final, with no rework loop.
+
+Ideas for later: due dates, comments and activity history on tasks, notifications.
 
 ## Author
 
-Built by TODO your name ([GitHub](https://github.com/<your-username>) · [LinkedIn](TODO)).
+Built by Khabiruzzaman. [GitHub](https://github.com/khabiruzzaman-dev) · [LinkedIn](https://www.linkedin.com/in/khabiruzzaman)
 
 ## License
 
-TODO: add a LICENSE file (MIT is a common choice for portfolio projects).
+MIT. See [LICENSE](LICENSE).
