@@ -104,7 +104,7 @@ export default function Edit_task_as_worker() {
               className="select"
               name="status"
               disabled={!is_selection_valid}
-              value={  form.status}
+              value={form.status ?? the_task.status}
               onChange={input_handler}
             >
               <option value={"in_progress"}>In Progress (currently)</option>
