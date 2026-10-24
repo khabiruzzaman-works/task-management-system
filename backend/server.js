@@ -9,11 +9,7 @@ async function server() {
       console.log(`hi, server is good to go,${variables.PORT}`);
     });
   } catch (error) {
-<<<<<<< HEAD
-    console.log("server failed to connect with db");
-=======
     console.log(`server failed to connect with db ,error : ${error}`);
->>>>>>> dev
     process.exit(1);
   }
 }
